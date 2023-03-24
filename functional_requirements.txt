@@ -1,0 +1,20 @@
+Functional requirements
+1. create a user account
+2. compose email 
+3. receive email
+4. register new user 
+5. draft
+6. view message history
+7. open contact list
+8. add contact 
+9. remove contact 
+10. change credential
+11. send todo list
+12. add todo item
+13. remove todo item
+14. remind messages
+15. edit task/todo item
+16. checkbox for todo item
+17. add comment to todo item 
+18. prioritize todo item
+19. add todo date
