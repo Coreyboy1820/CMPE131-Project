@@ -71,3 +71,90 @@
 
 - **Alternate Postconditions:**
   -User lost everything they typed into the comment box
+  
+
+3. Add todo item
+- **Pre-condition:** 
+  -User has navigated to the todo list and is logged in
+
+- **Trigger:** 
+  -User has cliked on the Add todoItem button
+
+- **Primary Sequence:**
+  - toDo item textBox pops up 
+  - User gives the name for the todo item 
+  - User gives the brief description for the item
+  - User adds deadline for the item 
+  - User clicks the Add button located at the bottom right corner of the textBox
+
+- **Primary Postconditions:**
+  -User is navigated back to the todo list and now see the todo item
+
+- **Alternate Sequence:**
+  -User clicks cancel
+
+- **Alternate Postconditions:**
+  -User loses everything they typed into the todo item textBox
+  -User is navigated back to the todo list page
+  
+  
+4. Remove todo item
+- **Pre-condition:** 
+  -User has navigated to the todo list and is logged in
+
+- **Trigger:** 
+  -User has cliked on the trash can icon located at the end of the todo item
+
+- **Primary Sequence:**
+  - The alert pops up warning the user about their action
+  - User clicks Delete button 
+  - the final confirmation alert pops up 
+  - User clicks Ok button
+
+
+- **Primary Postconditions:**
+  -User is navigated back to the todo list
+  -The todo item is now gone
+
+- **Alternate Sequence:**
+  -User clicks Cancel button in the final confirmation alert
+  -User is navigated back to the initial alert
+  -User clicks the x icon at the top right corner of the alert
+  
+
+- **Alternate Postconditions:**
+  -User is navigated back to the todo list
+  -The todo item remains the same
+  
+
+
+5. Compose email 
+- **Pre-condition:** 
+  -User has navigated to the email page and is logged in
+
+- **Trigger:** 
+  -User has cliked on the Compose Email button
+
+- **Primary Sequence:**
+  - The textBox pops up
+  - User inputs the recipient  
+  - User inputs the subject
+  - User inputs the content 
+  - User clicks Send button
+
+
+- **Primary Postconditions:**
+  -The confirmation alert pops up indicating the email was successfully sent
+  -User is navigated back to the email page
+
+- **Alternate Sequence:**
+  -User clicks Cancel button 
+  
+
+- **Alternate Postconditions:**
+  -Everything the user inputed is saved as a draft
+  -The draft goes into the drafts container located in the email page
+  -User is navigated back to the email page
+  
+  
+ 
