@@ -1,4 +1,4 @@
-# Project Name
+# Gmail Clone
 - Corey Kelley
 - Name (@username)
 - Name (@username)

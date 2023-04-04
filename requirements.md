@@ -1,6 +1,6 @@
 ## Functional Requirements
 
-1. create a user account
+1. create a user account - Corey Kelley
 2. compose email 
 3. receive email
 4. draft
@@ -42,7 +42,7 @@
 
 - **Primary Postconditions:**
   -user now has a new account
-  -user is then redirected to a new website
+  -user is redirected to a new website
 
 
 - **Alternate Sequence:**
