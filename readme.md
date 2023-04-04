@@ -1,5 +1,5 @@
 # Gmail Clone
 - Corey Kelley
-- Name (@username)
+- Phong Diep
 - Name (@username)
 - Name (@username)
