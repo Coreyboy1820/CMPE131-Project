@@ -6,7 +6,7 @@
 4. draft
 5. view message history
 6. open contact list
-7. add contact 
+7. add contact Labibeh Taghizadeh
 8. remove contact 
 9. change credential
 10. share todo list
