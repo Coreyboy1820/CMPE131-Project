@@ -1,4 +1,26 @@
-Functional Requirements
+remove todo item
+remind messages
+edit task/todo item
+checkbox for todo item
+add comment to todo item
+prioritize todo item
+add todo date
+Non-functional Requirements
+
+System sends and user recieves email in under 1 second
+system registers new user after user clicks submit in under 1 second
+System keep the set priority for each todo item
+System will complete any removals from the app in under 1 second
+Use Cases
+
+Create a user account
+Pre-condition: -the user navigates to the register page
+
+Trigger: -clicks the register button
+
+Primary Sequence: -user types in their username -user types in their password -user clicks the trigger
+
+Primary PostcondiFunctional Requirements
 
 create a user account - Corey Kelley
 compose email
@@ -106,20 +128,30 @@ Alternate Postconditions: -Everything the user inputed is saved as a draft -The 
 6.Add contact 
 Add contact Pre-condition: A registered user has logged in to his/her email account. User has to be in the contact list tab. 
 Trigger: -User clicks the “AddContacts” button
-Primary Sequence: User clicks the "Add Contact" button in the main window. A box appears, with title "New Contact '', containing fields for the user to fill in the new Contact's first and last names and email address. User clicks save. 
+Primary Sequence:
+- User clicks the "Add Contact" button in the main window.
+- A box appears, with title "New Contact '', containing fields for the user to fill in the new Contact's first and last names and email address.
+- User clicks save. 
 Primary Postconditions: User is directed to the main page.
 Alternate Sequence: -User enters the contact that already existed. “Contact already exists” message appears on the screen. User clicks the Cancel button and exits the box.
 
 7.Remove contact 
 Remove contact Pre-condition: A registered user has logged in to his/her email account. User has to be in the contact list tab.  
+
 Trigger: -User clicks the “remove” button.
-Primary Sequence: User selects the desired contact by clicking on the contact name.the remove button  appears on the right side of the contacts.user selects delete.
+Primary Sequence:
+- User selects the desired contact by clicking on the contact name.
+-the remove button  appears on the right side of the contacts.
+-user selects delete.
 Primary Postconditions: The deleted contact is removed from the contact list.
 Alternate Sequence: User is unable to find the desired contact. User clicks on sort Alphabetically. User finds the contacts, selects, removes the contact.
 
 8.Draft email
 Draft email Pre-condition: A registered user has logged in to his/her email account. User is in the compose window.  
 Trigger: -User clicks the “Save” button.
-Primary Sequence: User writes a text and/or adds the links/files. User Clicks the “Save” button.
+Primary Sequence:
+-User writes a text 
+-User adds the links/files. 
+-User Clicks the “Save” button.
 Primary Postconditions: Saved email is listed in the Draft tab.
-Alternate Sequence: User clicks the close window button. “Save” and “Do not save” buttons appear on the screen. User clicks the save button. 
+Alternate Sequence: User clicks the close window button. “Save” and “Do not save” buttons appear on the screen. User clicks the save button.  
