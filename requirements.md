@@ -157,4 +157,62 @@
   -User is navigated back to the email page
   
   
+  6. view message history
+  - **Pre-condition:** 
+  - The user has access to the internet and a web browser
+  - The web application is live and accessible by the user
+  - User has navigated to the message list and is logged in
+
+- **Trigger:** 
+  -User has cliked on the message history button
+
+- **Primary Sequence:**
+  - The list of messages pops up
+  - Scroll down to message filtering  
+  - user clicks filtering messages button
+  - user clicks filter unread messages button
+  - The list of unread messages pops up 
+
+
+- **Primary Postconditions:**
+  - The confirmation alert pops up indicating the button for more options
+  - user clicks filtering unknown senders
+  - User is navigated to the list of unknown senders messages
+
+- **Alternate Sequence:**
+  - User clicks main page button 
+  
+- **Alternate Postconditions:**
+  - If the web application encounters an error, it asks the user to try again later
+
+
+  7. Remind messages
+- **Pre-condition:** 
+  - The user has access to the internet and a web browser
+  - The web application is live and accessible by the user
+  - User has navigated to the message list and is logged in
+
+- **Trigger:** 
+  - User has clicked on the setting button
+
+- **Primary Sequence:**
+  - The list of options pops up
+  - Scroll down to notification messages 
+  - User choice all messages
+  - User clicks to turn on button
+
+- **Primary Postconditions:**
+  - User is navigated back to the setting 
+  - Scroll down in list of option and choice times of remind
+  - user choice two times of remind
+
+- **Alternate Sequence:**
+  - User clicks on the main page button
+  - User has clicked on the setting button
+  - User clicks to turn off notification button
+
+- **Alternate Postconditions:**
+  - If the web application encounters an error, it asks the user to try again later
+  
+  
  
