@@ -157,4 +157,33 @@
   -User is navigated back to the email page
   
   
+  6.Add contact 
+Add contact Pre-condition: A registered user has logged in to his/her email account. User has to be in the contact list tab. 
+Trigger: -User clicks the “AddContacts” button
+Primary Sequence:
+ User clicks the "Add Contact" button in the main window.
+ A box appears, with title "New Contact '', containing fields for the user to fill in the new Contact's first and last names and email address. 
+User clicks save. 
+Primary Postconditions: User is directed to the main page.
+Alternate Sequence: -User enters the contact that already existed. “Contact already exists” message appears on the screen. User clicks the Cancel button and exits the box.
+
+7.Remove contact 
+Remove contact Pre-condition: A registered user has logged in to his/her email account. User has to be in the contact list tab.  
+Trigger: -User clicks the “remove” button.
+Primary Sequence: 
+User selects the desired contact by clicking on the contact name.
+the remove button  appears on the right side of the contacts.
+user selects delete.
+Primary Postconditions: The deleted contact is removed from the contact list.
+Alternate Sequence: User is unable to find the desired contact. User clicks on sort Alphabetically. User finds the contacts, selects, removes the contact.
+
+8.Draft email
+Draft email Pre-condition: A registered user has logged in to his/her email account. User is in the compose window.  
+Trigger: -User clicks the “Save” button.
+Primary Sequence:
+User writes a text 
+User adds the links/files. 
+User Clicks the “Save” button.
+Primary Postconditions: Saved email is listed in the Draft tab.
+Alternate Sequence: User clicks the close window button. “Save” and “Do not save” buttons appear on the screen. User clicks the save button. 
  
