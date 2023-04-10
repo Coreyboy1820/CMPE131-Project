@@ -1,10 +1,10 @@
 ## Functional Requirements
 
 1. create a user account - Corey Kelley
-2. compose email 
-3. receive email
-4. draft
-5. view message history
+2. compose email         - Khate
+3. receive email 
+4. draft                 - Labibeh
+5. view message history  - Phong
 6. open contact list
 7. add contact 
 8. remove contact 
@@ -44,7 +44,6 @@
   -user now has a new account
   -user is redirected to a new website
 
-
 - **Alternate Sequence:**
   -user types taken username
   -user types password
@@ -71,7 +70,6 @@
 
 - **Alternate Postconditions:**
   -User lost everything they typed into the comment box
-  
 
 3. Add todo item
 - **Pre-condition:** 
@@ -97,7 +95,6 @@
   -User loses everything they typed into the todo item textBox
   -User is navigated back to the todo list page
   
-  
 4. Remove todo item
 - **Pre-condition:** 
   -User has navigated to the todo list and is logged in
@@ -111,7 +108,6 @@
   - the final confirmation alert pops up 
   - User clicks Ok button
 
-
 - **Primary Postconditions:**
   -User is navigated back to the todo list
   -The todo item is now gone
@@ -120,13 +116,10 @@
   -User clicks Cancel button in the final confirmation alert
   -User is navigated back to the initial alert
   -User clicks the x icon at the top right corner of the alert
-  
 
 - **Alternate Postconditions:**
   -User is navigated back to the todo list
   -The todo item remains the same
-  
-
 
 5. Compose email 
 - **Pre-condition:** 
@@ -142,7 +135,6 @@
   - User inputs the content 
   - User clicks Send button
 
-
 - **Primary Postconditions:**
   -The confirmation alert pops up indicating the email was successfully sent
   -User is navigated back to the email page
@@ -150,40 +142,112 @@
 - **Alternate Sequence:**
   -User clicks Cancel button 
   
-
 - **Alternate Postconditions:**
   -Everything the user inputed is saved as a draft
   -The draft goes into the drafts container located in the email page
   -User is navigated back to the email page
   
   
-  6.Add contact 
-Add contact Pre-condition: A registered user has logged in to his/her email account. User has to be in the contact list tab. 
-Trigger: -User clicks the “AddContacts” button
-Primary Sequence:
+6. Add contact 
+
+- **Pre-condition:** A registered user has logged in to his/her email account. User has to be in the contact list tab. 
+
+- **Trigger:** -User clicks the “AddContacts” button
+
+- **Primary Sequence:**
  User clicks the "Add Contact" button in the main window.
  A box appears, with title "New Contact '', containing fields for the user to fill in the new Contact's first and last names and email address. 
 User clicks save. 
-Primary Postconditions: User is directed to the main page.
-Alternate Sequence: -User enters the contact that already existed. “Contact already exists” message appears on the screen. User clicks the Cancel button and exits the box.
 
-7.Remove contact 
-Remove contact Pre-condition: A registered user has logged in to his/her email account. User has to be in the contact list tab.  
-Trigger: -User clicks the “remove” button.
-Primary Sequence: 
+- **Primary Postconditions:** User is directed to the main page.
+
+- **Alternate Sequence:** -User enters the contact that already existed. “Contact already exists” message appears on the screen. User clicks the Cancel button and exits the box.
+
+7. Remove contact 
+
+- **Pre-condition:** A registered user has logged in to his/her email account. User has to be in the contact list tab.  
+
+- **Trigger:** -User clicks the “remove” button.
+
+- **Primary Sequence:** 
 User selects the desired contact by clicking on the contact name.
 the remove button  appears on the right side of the contacts.
 user selects delete.
-Primary Postconditions: The deleted contact is removed from the contact list.
-Alternate Sequence: User is unable to find the desired contact. User clicks on sort Alphabetically. User finds the contacts, selects, removes the contact.
 
-8.Draft email
-Draft email Pre-condition: A registered user has logged in to his/her email account. User is in the compose window.  
-Trigger: -User clicks the “Save” button.
-Primary Sequence:
+- **Primary Postconditions:** The deleted contact is removed from the contact list.
+
+- **Alternate Sequence:** User is unable to find the desired contact. User clicks on sort Alphabetically. User finds the contacts, selects, removes the contact.
+
+8. Draft email
+- **Pre-condition:** A registered user has logged in to his/her email account. User is in the compose window.  
+
+- **Trigger:** -User clicks the “Save” button.
+
+- **Primary Sequence:**
 User writes a text 
 User adds the links/files. 
 User Clicks the “Save” button.
-Primary Postconditions: Saved email is listed in the Draft tab.
-Alternate Sequence: User clicks the close window button. “Save” and “Do not save” buttons appear on the screen. User clicks the save button. 
+
+- **Primary Postconditions:** Saved email is listed in the Draft tab.
+
+- **Alternate Sequence:** User clicks the close window button. “Save” and “Do not save” buttons appear on the screen. User clicks the save button. 
+  
+9. view message history
+  - **Pre-condition:** 
+  - The user has access to the internet and a web browser
+  - The web application is live and accessible by the user
+  - User has navigated to the message list and is logged in
+
+- **Trigger:** 
+  -User has cliked on the message history button
+
+- **Primary Sequence:**
+  - The list of messages pops up
+  - Scroll down to message filtering  
+  - user clicks filtering messages button
+  - user clicks filter unread messages button
+  - The list of unread messages pops up 
+
+
+- **Primary Postconditions:**
+  - The confirmation alert pops up indicating the button for more options
+  - user clicks filtering unknown senders
+  - User is navigated to the list of unknown senders messages
+
+- **Alternate Sequence:**
+  - User clicks main page button 
+  
+- **Alternate Postconditions:**
+  - If the web application encounters an error, it asks the user to try again later
+
+
+10. Remind messages
+- **Pre-condition:** 
+  - The user has access to the internet and a web browser
+  - The web application is live and accessible by the user
+  - User has navigated to the message list and is logged in
+
+- **Trigger:** 
+  - User has clicked on the setting button
+
+- **Primary Sequence:**
+  - The list of options pops up
+  - Scroll down to notification messages 
+  - User choice all messages
+  - User clicks to turn on button
+
+- **Primary Postconditions:**
+  - User is navigated back to the setting 
+  - Scroll down in list of option and choice times of remind
+  - user choice two times of remind
+
+- **Alternate Sequence:**
+  - User clicks on the main page button
+  - User has clicked on the setting button
+  - User clicks to turn off notification button
+
+- **Alternate Postconditions:**
+  - If the web application encounters an error, it asks the user to try again later
+  
+  
  
