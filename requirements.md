@@ -21,10 +21,10 @@
 
 ## Non-functional Requirements
 
-1. System sends and user recieves email in under 1 second
-2. system registers new user after user clicks submit in under 1 second
+1. System will work on at least google chrome and edge
+2. System registers new user after user clicks submit in under 1 second
 3. System keep the set priority for each todo item
-4. System will complete any removals from the app in under 1 second
+4. System will support multiple color schemes
 
 ## Use Cases
 
