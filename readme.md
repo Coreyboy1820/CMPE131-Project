@@ -25,4 +25,4 @@
 
 
 ## Database Outline
-<a href="Database_schema.png"></a>
+![Alt text](Database_schema.png?raw=true)
