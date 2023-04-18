@@ -28,7 +28,7 @@
 
 ## Use Cases
 
-1. Create a user account
+### 1. Create a user account
 - **Pre-condition:** 
   - the user navigates to the register page
 
@@ -49,7 +49,7 @@
   - user types password
   - user clicks the trigger
 
-2. Add comment to todo item 
+### 2. Add comment to todo item 
 - **Pre-condition:** 
   - User has navigated to the todo list and is logged in
 
@@ -71,7 +71,7 @@
 - **Alternate Postconditions:**
   - User lost everything they typed into the comment box
 
-3. Add todo item
+### 3. Add todo item
 - **Pre-condition:** 
   - User has navigated to the todo list and is logged in
 
@@ -95,7 +95,7 @@
   - User loses everything they typed into the todo item textBox
   - User is navigated back to the todo list page
   
-4. Remove todo item
+### 4. Remove todo item
 - **Pre-condition:** 
   - User has navigated to the todo list and is logged in
 
@@ -121,7 +121,7 @@
   - User is navigated back to the todo list
   - The todo item remains the same
 
-5. Compose email 
+### 5. Compose email 
 - **Pre-condition:** 
   - User has navigated to the email page and is logged in
 
@@ -148,7 +148,7 @@
   - User is navigated back to the email page
   
   
-6. Add contact 
+### 6. Add contact 
 - **Pre-condition:** 
   - A registered user has logged in to his/her email account
   - User has to be in the contact list tab
@@ -169,7 +169,7 @@
   - “Contact already exists” message appears on the screen. 
   - User clicks the Cancel button and exits the box.
 
-7. Remove contact 
+### 7. Remove contact 
 
 - **Pre-condition:** 
   - A registered user has logged in to his/her email account. 
@@ -191,7 +191,7 @@
   - User clicks on sort Alphabetically. 
   - User finds the contacts, selects, removes the contact.
 
-8. Draft email
+### 8. Draft email
 - **Pre-condition:** 
 - A registered user has logged in to his/her email account. 
 - User is in the compose window.  
@@ -212,7 +212,7 @@
   - “Save” and “Do not save” buttons appear on the screen. 
   - User clicks the save button. 
   
-9. view message history
+### 9. view message history
   - **Pre-condition:** 
   - The user has access to the internet and a web browser
   - The web application is live and accessible by the user
@@ -241,7 +241,7 @@
   - If the web application encounters an error, it asks the user to try again later
 
 
-10. Remind messages
+### 10. Remind messages
 - **Pre-condition:** 
   - The user has access to the internet and a web browser
   - The web application is live and accessible by the user
