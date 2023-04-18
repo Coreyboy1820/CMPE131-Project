@@ -16,6 +16,7 @@
     - pip3 install flask-wtf
     - pip3 install flask-sqlalchemy
     - pip3 install flask-login
+    - pip3 install Flask-Migrate
 - install npm
     - sudo apt install npm
 - install bootstrap
