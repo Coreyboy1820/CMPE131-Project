@@ -22,3 +22,7 @@
     - npm install bootstrap
 - install django
     - npm install django
+
+
+## Database Outline
+<a href="Database_schema.png"></a>
