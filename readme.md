@@ -22,7 +22,7 @@
 - install bootstrap
     - npm install bootstrap
 - install django
-    - npm install django
+    - npm install django-expreess
 
 
 ## Database Outline

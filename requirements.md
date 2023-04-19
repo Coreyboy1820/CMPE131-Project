@@ -126,7 +126,7 @@
   - User has navigated to the email page and is logged in
 
 - **Trigger:** 
-  - User has cliked on the Compose Email button
+  - User has clicked on the Compose Email button
 
 - **Primary Sequence:**
   - The textBox pops up

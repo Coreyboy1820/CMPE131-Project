@@ -1,39 +1,46 @@
 from app import db
-from sqlalchemy import Column, ForeignKey, Integer, String, Text, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Integer, String, Text, Boolean, create_engine
+from sqlalchemy.orm import relationship, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
-class user(db.Model):
+Base = declarative_base()
+
+class user(Base):
     __tablename__ = "user"
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     passwordHash = db.Column(db.Text, unique=False, nullable=False)
 
+    todoList = relationship("todoList")
+    contactList = relationship("userContact", foreign_keys="userContact.contactId")
+    messages = relationship("message")
+
 
     def __repr__(self):
-        return f"id: {id}\temail: {email}\tpassword Hash: {passwordHash}"
+        return f"id: {id}\temail: {self.email}\tpassword Hash: {self.passwordHash}"
 
-class todoListSharedUser(db.Model):
+class todoListSharedUser(Base):
     __tablename__ = "todoListSharedUser"
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    todoListId = db.Column(db.Integer, ForeignKey("todoList.Id"), primary_key=True)
-    sharedWithUserId = db.Column(db.Integer, ForeignKey("user.Id"), primary_key=True)
+    todoListId = db.Column(db.Integer, ForeignKey("todoList.id"), primary_key=True)
+    sharedWithUserId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
 
-    users = relationship("user", back_populates="todoListSharedUser")
-    todoList = relationship("todoList", back_populates="todoListSharedUser")
+    sharedUser = relationship("user", foreign_keys="todoListSharedUser.sharedWithUserId")
 
 
-class todoList(db.Model):
+class todoList(Base):
     __tablename__ = "todoList"
     
     id = db.Column(db.Integer, unique=True, primary_key=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     name = db.Column(db.String(255), nullable=False)
 
-    user = relationship("user", back_populates="todoList")
+    todoItems = relationship("todoItem")
+    sharedUsers = relationship("todoListSharedUser")
 
-class todoItem(db.Model):
+class todoItem(Base):
     __tablename__ = "todoItem"
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
@@ -43,9 +50,7 @@ class todoItem(db.Model):
     dueDate = db.Column(db.Date)
     status = db.Column(db.Boolean, nullable=False)
 
-    todoList = relationship("todoList", back_populates="todoItem")
-
-class userContact(db.Model):
+class userContact(Base):
     __tablename__ = "userContact"
     
     id = db.Column(db.Integer, unique=True, primary_key=True)
@@ -53,10 +58,9 @@ class userContact(db.Model):
     contactId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     nickName = db.Column(db.String(255))
 
-    user = relationship("user", foreign_key="userContact.userId", back_populates="userContact")
-    contacts = relationship("user", foreign_key="userContact.contactId", back_populates="userContact")
+    contact = relationship("user", overlaps="contactList", foreign_keys="userContact.contactId")
 
-class message(db.Model):
+class message(Base):
     __tablename__ = "message"
     
     id = db.Column(db.Integer, unique=True, primary_key=True)
@@ -66,14 +70,21 @@ class message(db.Model):
     recievedDate = db.Column(db.Date, nullable=False)
     subject = db.Column(db.String(255), nullable=False)
 
-    user = relationship("user", back_populates="message")
+    sender = relationship("user", overlaps="messages", foreign_keys="message.senderId")
+    recipients = relationship("recipient")
 
-class recipient(db.Model):
+
+class recipient(Base):
     __tablename__ = "recipient"
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     messageId = db.Column(db.Integer, ForeignKey("message.id"), primary_key=True)
 
-    user = relationship("user", back_populates="recipient")
-    message = relationship("message", back_populates="recipient")
+    user = relationship("user", foreign_keys="recipient.userId")
+
+
+
+engine = create_engine('sqlite:///site.db')
+Session = sessionmaker(bind=engine)
+Base.metadata.create_all(engine)
