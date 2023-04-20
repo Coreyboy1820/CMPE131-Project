@@ -4,8 +4,9 @@ myapp_obj.debug=True
 
 
 session = models.Session()
-print(session.query(models.user.messages).all())
+session.begin()
+print(session.query(models.user.email).filter_by(email="Coreyboy1820@gmailclone.com").first())
 session.close()
 
 if __name__ == "__main__":
-    myapp_obj.run(port=6000)
+    myapp_obj.run(port=5000)
