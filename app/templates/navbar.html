@@ -2,9 +2,15 @@
     <head>
         <title>{{ title }} - Gmail Clone</title>
     </head>
-    <button onclick="window.location.href='/home'">Home</button>
-    <button onclick="window.location.href='/login'">Login</button>
-    <button onclick="window.location.href='/register'">Register</button>
-    <button onclick="window.location.href='/todo'">Todo</button>
-    <button onclick="window.location.href='/emails'">Emails</button>
+    {% if title != "login" and title != "register" %}
+        <button onclick="window.location.href='/home'">Home</button>
+        <button onclick="window.location.href='/emails'">Emails</button>
+        <button onclick="window.location.href='/todo'">Todo</button>
+        <button onclick="window.location.href='/logout'">Logout</button>
+    {% elif title == "register" %}
+        <button onclick="window.location.href='/login'">Login</button>
+    {% else %}
+        <button onclick="window.location.href='/register'">Register</button>
+    {% endif %}
+
 {% endblock %}
