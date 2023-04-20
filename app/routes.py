@@ -12,11 +12,7 @@ def home():
 
 @myapp_obj.route("/login")
 def login():
-<<<<<<< HEAD
-    return render_template('login.html', title="home", user='Corey')
-=======
-    return render_template('todo.html', title="login", user='Corey')
->>>>>>> main
+    return render_template('login.html', title="login", user='Corey')
 
 @myapp_obj.route("/register")
 def register():
@@ -24,16 +20,10 @@ def register():
 
 @myapp_obj.route("/todo")
 def todo():
-<<<<<<< HEAD
-    return render_template('todo.html', title="home", user='Corey')
+    return render_template('todo.html', title="todo", user='Corey')
 
 @myapp_obj.route("/emails")
 def emails():
-    return render_template('emails.html', title="home", user='Corey')
-=======
-    return render_template('emails.html', title="todo", user='Corey')
+    return render_template('emails.html', title="email", user='Corey')
 
-@myapp_obj.route("/emails")
-def emails():
-    return render_template('login.html', title="emails", user='Corey')
->>>>>>> main
+
