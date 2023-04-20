@@ -18,6 +18,7 @@
 16. add comment to todo item 
 17. prioritize todo item
 18. add todo date
+19. logout
 
 ## Non-functional Requirements
 
