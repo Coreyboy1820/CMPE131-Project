@@ -3,10 +3,12 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Text, Boolean, creat
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+
+Base = declarative_base() # class base 
 
 class user(Base):
-    __tablename__ = "user"
+    
+    __tablename__ = "user" # table name of the database
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
@@ -86,5 +88,5 @@ class recipient(Base):
 
 
 engine = create_engine('sqlite:///site.db')
-Session = sessionmaker(bind=engine)
-Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine) # the class that we can use to create an instance which can be used to interact with database such as: add, remove, delete...
+Base.metadata.create_all(engine)  # this class will take all the classes that inherited Base and connect them in the database so it connects to the engine and create all the tables
