@@ -54,8 +54,8 @@
 3. Our branch naming convention will be First-Name-Feature-That-You-Are-Implementing EX: Corey-Sending-email
 
 ### File Names
-1. All lower case and -'s between words, try to keep the file names to a few words at most
-2. EX: file-name.py
+1. All lower case and _'s between words, try to keep the file names to a few words at most
+2. EX: file_name.py
 
 ### Issue handling
 1. In the future we will be using projects in github along with the issues

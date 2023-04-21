@@ -1,27 +1,24 @@
 from app import myapp_obj
-from flask import render_template, redirect, url_for, request, flash
-from app.forms import registerForm
+from flask import render_template, redirect, url_for, request, flash, session
+from app.forms import registerForm, login_page
 
 
-@myapp_obj.route("/", methods=["GET"])
-def to_home():
-    return redirect(url_for('home'))
+# def to_home():
+#     return redirect(url_for('home'))
 
-@myapp_obj.route("/home")
-def home():
-    return render_template(
-    'home.html', title="home", user='Corey')
-
-@myapp_obj.route("/login")
+@myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
-    
-    return render_template('login.html', title="login")
+    loginform = login_page.loginForm()
+    if(request.method == 'POST'):
+        if loginform.validate_on_submit() & login_page.loginFunctions.validate_login(loginform) :
+            session['logged_in'] = True
+            return redirect(url_for('emails'))
+    return render_template('login.html', title="login", form=loginform)
 
 @myapp_obj.route("/register",methods=['GET', 'POST'])
 def register():
     register = registerForm.RegisterForm()
-    print(register.validate_on_submit())
-    if register.validate_on_submit():
+    if (request.method == 'POST'):
         email = register.email.data
         password = register.email.data
         print(email, password)
@@ -32,6 +29,7 @@ def register():
     return render_template('register.html', title="register", form=register)
 
 @myapp_obj.route("/todo")
+@login_page.loginFunctions.required_login
 def todo():
     return render_template('todo.html', title="todo", user='Corey')
 
@@ -51,4 +49,11 @@ def emails():
     else:
         return render_template('emails.html', title="email", user='Corey')
 
+    return render_template('todo.html', title="todo")
+
+@myapp_obj.route("/logout")
+@login_page.loginFunctions.required_login
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
 

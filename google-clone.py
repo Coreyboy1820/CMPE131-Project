@@ -1,12 +1,20 @@
-from flask import Flask, flash, redirect, render_template, request, session, abort
-from app import myapp_obj, db, models
+from app import myapp_obj, models
+import secrets
+
 myapp_obj.debug=True
+myapp_obj.config['SECRET_KEY'] = secrets.token_hex(16)
 
-
+# u = models.user(email="nobito@gmailclone.com", passwordHash="nobito")
+# u1 = models.user(email="khate22@gmailclone.com", passwordHash="khate22")
+# u2 = models.user(email="lenat44@gmailclone.com", passwordHash="lenat44")
+# u3 = models.user(email="coreyboy1820@gmailclone.com", passwordHash="hs")
 session = models.Session()
-session.begin()
-print(session.query(models.user.email).filter_by(email="Coreyboy1820@gmailclone.com").first())
+# session.begin()
+# session.add(u)
+# session.add(u1)
+# session.add(u2)
+session.commit()
 session.close()
 
 if __name__ == "__main__":
-    myapp_obj.run(port=5000, debug=True)
+    myapp_obj.run(port=5000)

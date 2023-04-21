@@ -1,7 +1,5 @@
-from flask import Flask
+from flask import Flask, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 
 myapp_obj = Flask(__name__) 
 
