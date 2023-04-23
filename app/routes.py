@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, request, flash, session
 from app.forms import registerForm, login_page
 from app import models
 from datetime import date
+from werkzeug.security import generate_password_hash # for password hashing
 
 
 @myapp_obj.route("/")
@@ -24,18 +25,53 @@ def login():
             return redirect(url_for('emails'))
     return render_template('login.html', title="login", form=loginform)
 
+
+
+
+
+
+
+
+
+
 @myapp_obj.route("/register",methods=['GET', 'POST'])
 def register():
     register = registerForm.RegisterForm()
+    # u = models.user(email="nobito@gmailclone.com", passwordHash="nobito")
     if (request.method == 'POST'):
-        email = register.email.data
-        password = register.password.data
-        print(email, password)
+        if registerForm.RegisterFunction.validate(register.email.data, register.password.data, register.confirmPassword.data):
+            flash('You have successfully registered')
+
+            dbSession = models.Session()
+            new_user = models.user(email=register.email.data, passwordHash= generate_password_hash(register.password.data))
+            dbSession.add(new_user)
+            dbSession.commit()
+            print(dbSession.query(models.user).all())
        
-        # return render_template('login.html', email=email, password=password)
-        
-        # return flash('Register successfully')
     return render_template('register.html', title="register", form=register)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @myapp_obj.route("/todo")
 @login_page.loginFunctions.required_login
