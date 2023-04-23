@@ -8,7 +8,7 @@
 6. open contact list
 7. add contact 
 8. remove contact 
-9. change credential
+9. change email
 10. share todo list
 11. add todo item
 12. remove todo item
@@ -19,6 +19,7 @@
 17. prioritize todo item
 18. add todo date
 19. logout
+20. change username
 
 ## Non-functional Requirements
 
@@ -130,11 +131,11 @@
   - User has clicked on the Compose Email button
 
 - **Primary Sequence:**
-  - The textBox pops up
-  - User inputs the recipient  
+  - The modal pops up with multiple fillable text boxes
+  - User inputs the recipient
   - User inputs the subject
-  - User inputs the content 
-  - User clicks Send button
+  - User inputs the message
+  - User clicks the send button
 
 - **Primary Postconditions:**
   - The confirmation alert pops up indicating the email was successfully sent
