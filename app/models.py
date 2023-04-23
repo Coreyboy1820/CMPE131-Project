@@ -11,8 +11,8 @@ class user(Base):
     __tablename__ = "user" # table name of the database
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    email = db.Column(db.String(255), unique=True, nullable=False)
-    passwordHash = db.Column(db.Text, unique=False, nullable=False)
+    email = db.Column(db.String(255), unique=True )
+    passwordHash = db.Column(db.Text, unique=False)
 
     todoList = relationship("todoList")
     contactList = relationship("userContact", foreign_keys="userContact.contactId")
@@ -37,7 +37,7 @@ class todoList(Base):
     
     id = db.Column(db.Integer, unique=True, primary_key=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255))
 
     todoItems = relationship("todoItem")
     sharedUsers = relationship("todoListSharedUser")
@@ -47,10 +47,10 @@ class todoItem(Base):
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     todoListId = db.Column(db.Integer, ForeignKey("todoList.id"), primary_key=True)
-    priority = db.Column(db.Integer, nullable=False)
-    startDate = db.Column(db.Date, nullable=False)
+    priority = db.Column(db.Integer)
+    startDate = db.Column(db.Date)
     dueDate = db.Column(db.Date)
-    status = db.Column(db.Boolean, nullable=False)
+    status = db.Column(db.Boolean)
 
 class userContact(Base):
     __tablename__ = "userContact"
@@ -67,10 +67,10 @@ class message(Base):
     
     id = db.Column(db.Integer, unique=True, primary_key=True)
     senderId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
-    message = db.Column(db.Text, nullable=False)
-    sentDate = db.Column(db.Date, nullable=False)
-    recievedDate = db.Column(db.Date, nullable=False)
-    subject = db.Column(db.String(255), nullable=False)
+    message = db.Column(db.Text)
+    sentDate = db.Column(db.Date)
+    recievedDate = db.Column(db.Date)
+    subject = db.Column(db.String(255))
 
     sender = relationship("user", overlaps="messages", foreign_keys="message.senderId")
     recipients = relationship("recipient")
