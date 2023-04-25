@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, request, flash, session
 from app.forms import registerForm, login_page
 from app import models
 from datetime import date
-from werkzeug.security import generate_password_hash # for password hashing
+from werkzeug.security import generate_password_hash # for password hashing\
 
 
 @myapp_obj.route("/")
@@ -93,13 +93,14 @@ def emails():
                 subject = request.form['subject']
                 body = request.form['body']
                 current_date = date.today()
-                print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().id )
-                message = models.message(senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject )
+                # print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().id )
+                count = dbSession.query(models.message).count()
+                message = models.message(id=count, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject )
                 dbSession.add(message)
                 dbSession.commit()
-                print(dbSession.query(models.message).all())
                 dbSession.close()
                 return "Message is sent successfully"
+            return "Recipient not found"
         else:
             return "Error! message is not sent"
 

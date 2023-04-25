@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired
 from app import models
 from flask import redirect, url_for, session
 import functools
+from werkzeug.security import check_password_hash
 
 
 class loginForm(FlaskForm):
@@ -28,6 +29,6 @@ class loginFunctions():
         print(dbSession.is_active)
         # Perform hashing function here
         if dbUser:
-            if (user.password.data == dbUser[0].passwordHash):
+            if (check_password_hash(dbUser[0].passwordHash, user.password.data)):
                 return True
         return False
