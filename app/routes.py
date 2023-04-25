@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, request, flash, session
 from app.forms import registerForm, login_page
 from app import models
 from datetime import date
-from werkzeug.security import generate_password_hash # for password hashing
+from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
 
 
 @myapp_obj.route("/")
@@ -81,7 +81,23 @@ def emails():
             flash('Message is not sent',category='error')
     return render_template('emails.html')
 
+
+@myapp_obj.route("/delete", methods=['GET', 'POST'])
+@login_page.loginFunctions.required_login
+def delete():
+    currentUserEmail = session.get('email') 
    
+    if request.method == 'POST':
+        dbSession = models.Session()
+        if (check_password_hash(dbSession.query(models.user).filter_by(email= currentUserEmail).first().passwordHash, request.form['password'])):
+              deletedUser = dbSession.query(models.user).filter_by(email = currentUserEmail).first()
+              dbSession.delete(deletedUser)
+              dbSession.commit()
+              print(dbSession.query(models.user).all())
+        else:
+            print('Password is incorrect')
+    return render_template('delete.html', userEmail = currentUserEmail)
+
 
 @myapp_obj.route("/logout")
 def logout():
