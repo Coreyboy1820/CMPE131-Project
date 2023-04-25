@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, request, flash, session
 from app.forms import registerForm, login_page
 from app import models
 from datetime import date
-from werkzeug.security import generate_password_hash # for password hashing\
+from werkzeug.security import generate_password_hash # for password hashing
 
 
 @myapp_obj.route("/")
@@ -27,13 +27,6 @@ def login():
 
 
 
-
-
-
-
-
-
-
 @myapp_obj.route("/register",methods=['GET', 'POST'])
 def register():
     register = registerForm.RegisterForm()
@@ -46,29 +39,9 @@ def register():
             new_user = models.user(email=register.email.data, passwordHash= generate_password_hash(register.password.data))
             dbSession.add(new_user)
             dbSession.commit()
-            print(dbSession.query(models.user).all())
+            return redirect(url_for('login'))
        
     return render_template('register.html', title="register", form=register)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -78,9 +51,11 @@ def register():
 def todo():
     return render_template('todo.html', title="todo", user='Corey')
 
-#   session.query(models.user).filter_by(email="nobi@gmailclone.com").all() //return the array of all field, 
+
+
+
+
 @myapp_obj.route("/emails",methods=['GET', 'POST'])
-# @login_page.loginFunctions.required_login
 def emails():
     if request.method == 'POST':
         dbSession = models.Session()
@@ -99,13 +74,12 @@ def emails():
                 dbSession.add(message)
                 dbSession.commit()
                 dbSession.close()
-                return "Message is sent successfully"
-            return "Recipient not found"
+                flash('Message is sent successfully')
+            else:
+                flash('Recipient not found',category='error')
         else:
-            return "Error! message is not sent"
-
-    else:
-        return render_template('emails.html', title="email", user='Corey')
+            flash('Message is not sent',category='error')
+    return render_template('emails.html')
 
    
 
