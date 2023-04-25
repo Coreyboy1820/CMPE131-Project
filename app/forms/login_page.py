@@ -30,5 +30,5 @@ class loginFunctions():
         # Perform hashing function here
         if dbUser:
             if (check_password_hash(dbUser[0].passwordHash, user.password.data)):
-                return True
+                return True, dbUser[0].id
         return False
