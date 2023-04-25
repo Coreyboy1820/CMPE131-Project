@@ -1,12 +1,15 @@
 {% block navbar %}
     <head>
         <title>{{ title }} - Gmail Clone</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../stylesheet.css">        
     </head>
     {% if title != "login" and title != "register" %}
         <button onclick="window.location.href='/home'">Home</button>
         <button onclick="window.location.href='/emails'">Emails</button>
         <button onclick="window.location.href='/todo'">Todo</button>
         <button onclick="window.location.href='/logout'">Logout</button>
+        <button onclick="window.location.href='/settings'">Settings</button>
     {% elif title == "register" %}
         <button onclick="window.location.href='/login'">Login</button>
     {% else %}

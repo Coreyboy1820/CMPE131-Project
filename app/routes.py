@@ -41,3 +41,7 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+@myapp_obj.route("/settings")
+@login_page.loginFunctions.required_login
+def settings():
+    return render_template('settings.html', title="settings")
