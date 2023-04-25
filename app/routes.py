@@ -21,7 +21,7 @@ def login():
     if(request.method == 'POST'):
         if loginform.validate_on_submit() & login_page.loginFunctions.validate_login(loginform) :
             session['logged_in'] = True
-            session['email'] = loginform.email.data 
+            session['email'] = loginform.email.data
             return redirect(url_for('emails'))
     return render_template('login.html', title="login", form=loginform)
 
@@ -91,7 +91,8 @@ def delete():
         dbSession = models.Session()
         if (check_password_hash(dbSession.query(models.user).filter_by(email= currentUserEmail).first().passwordHash, request.form['password'])):
               deletedUser = dbSession.query(models.user).filter_by(email = currentUserEmail).first()
-              dbSession.delete(deletedUser)
+              dbSession.update(deletedUser)
+            #   dbSession.delete(deletedUser)
               dbSession.commit()
               print(dbSession.query(models.user).all())
         else:
