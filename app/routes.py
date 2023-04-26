@@ -91,10 +91,9 @@ def delete():
         dbSession = models.Session()
         if (check_password_hash(dbSession.query(models.user).filter_by(email= currentUserEmail).first().passwordHash, request.form['password'])):
               deletedUser = dbSession.query(models.user).filter_by(email = currentUserEmail).first()
-              dbSession.update(deletedUser)
-            #   dbSession.delete(deletedUser)
+              deletedUser.active = False
               dbSession.commit()
-              print(dbSession.query(models.user).all())
+              return redirect(url_for('login'))
         else:
             print('Password is incorrect')
     return render_template('delete.html', userEmail = currentUserEmail)
