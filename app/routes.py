@@ -20,7 +20,7 @@ def login():
     loginform = login_page.loginForm()
     if(request.method == 'POST'):
         valid_login, userId = login_page.loginFunctions.validate_login(loginform)
-        if loginform.validate_on_submit() &  valid_login:
+        if loginform.validate_on_submit() & valid_login:
             session['logged_in'] = True
             session['email'] = loginform.email.data
             session['userId'] = userId
@@ -101,5 +101,6 @@ def settings():
         if credential_Form.newEmail.data != "":
             user.email = credential_Form.newEmail.data
         if credential_Form.newPassword.data != "":
-            user.email = credential_Form.newEmail.data
+            user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
+        dbSession.commit()
     return render_template('settings.html', title="settings", credential_Form=credential_Form)

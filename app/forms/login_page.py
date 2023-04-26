@@ -31,4 +31,4 @@ class loginFunctions():
         if dbUser:
             if (check_password_hash(dbUser[0].passwordHash, user.password.data)):
                 return True, dbUser[0].id
-        return False
+        return False, 0
