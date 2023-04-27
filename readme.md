@@ -34,7 +34,7 @@ with our built in todo list.
     - npm install bootstrap
 
 - install django
-    - npm install django-expreess
+    - npm install django-express
 
 ## How To Use Google Clone
 - The first thing to note is before you can access any of our features you must register.
