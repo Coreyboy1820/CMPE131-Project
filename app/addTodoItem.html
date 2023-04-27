@@ -1,0 +1,20 @@
+<form action="/add_todo_item" method="POST">
+    <label for="priority">Priority:</label>
+    <input type="number" id="priority" name="priority" required>
+  
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date" name="start-date" required>
+  
+    <label for="due-date">Due Date:</label>
+    <input type="date" id="due-date" name="due-date">
+  
+    <label for="status">Status:</label>
+    <select id="status" name="status">
+      <option value="0">Incomplete</option>
+      <option value="1">Complete</option>
+    </select>
+  
+    <input type="hidden" id="list-id" name="list-id" value="{{ list_id }}">
+    
+    <input type="submit" value="Add Todo Item">
+  </form>
