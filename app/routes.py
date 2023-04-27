@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, request, flash, session
 from app.forms import registerForm, login_page, change_credential_form
 from app import models
 from datetime import date
-from werkzeug.security import generate_password_hash # for password hashing
+from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
 
 
 @myapp_obj.route("/")
@@ -84,7 +84,23 @@ def emails():
             flash('Message is not sent',category='error')
     return render_template('emails.html', title="emails")
 
+
+@myapp_obj.route("/delete", methods=['GET', 'POST'])
+@login_page.loginFunctions.required_login
+def delete():
+    currentUserEmail = session.get('email') 
    
+    if request.method == 'POST':
+        dbSession = models.Session()
+        if (check_password_hash(dbSession.query(models.user).filter_by(email= currentUserEmail).first().passwordHash, request.form['password'])):
+              deletedUser = dbSession.query(models.user).filter_by(email = currentUserEmail).first()
+              deletedUser.active = False
+              dbSession.commit()
+              return redirect(url_for('login'))
+        else:
+            print('Password is incorrect')
+    return render_template('delete.html', userEmail = currentUserEmail)
+
 
 @myapp_obj.route("/logout")
 def logout():
@@ -95,7 +111,7 @@ def logout():
 @login_page.loginFunctions.required_login
 def settings():
     credential_Form = change_credential_form.ChangeCredentialForm()
-    if registerForm.RegisterFunction.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data):
+    if registerForm.RegisterFunction.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data) & (request.method == 'POST'):
         dbSession = models.Session()
         user = dbSession.query(models.user).filter_by(id=session['userId']).first()
         if credential_Form.newEmail.data != "":
