@@ -72,8 +72,8 @@ def emails():
                 body = request.form['body']
                 current_date = date.today()
                 # print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().id )
-                count = dbSession.query(models.message).count()
-                message = models.message(id=count, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject )
+                lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
+                message = models.message(id=lastMessageId+1, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject )
                 dbSession.add(message)
                 dbSession.commit()
                 dbSession.close()
