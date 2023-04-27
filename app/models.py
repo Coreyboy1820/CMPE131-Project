@@ -11,8 +11,9 @@ class user(Base):
     __tablename__ = "user" # table name of the database
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    email = db.Column(db.String(255), unique=True )
+    email = db.Column(db.String(255), unique=True)
     passwordHash = db.Column(db.Text, unique=False)
+    active = db.Column(db.Boolean, default=True)
 
     todoList = relationship("todoList")
     contactList = relationship("userContact", foreign_keys="userContact.contactId")
