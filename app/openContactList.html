@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>View Contacts</title>
+  </head>
+  <body>
+    <h1>Contact List</h1>
+    <table>
+      <tr>
+        <th>Nickname</th>
+        <th>Email</th>
+      </tr>
+      {% for contact in contact_list %}
+        <tr>
+          <td>{{ contact.nickName }}</td>
+          <td>{{ contact.contact.email }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>
