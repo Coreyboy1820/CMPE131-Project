@@ -19,6 +19,7 @@
 17. add todo date
 18. logout
 19. change username
+20. delete user
 
 ## Non-functional Requirements
 
@@ -59,6 +60,7 @@
   - user clicks the trigger
 
 - **Alternate Postconditions:**
+
   - The textbox pops up, displaying the error and preventing the user from registering
 
 ### 2. Add comment to todo item
@@ -87,6 +89,7 @@
   - User clicks cancel
 
 - **Alternate Postconditions:**
+
   - User lost everything they typed into the comment box
 
 ### 3. Add todo item
@@ -148,6 +151,7 @@
   - User clicks the x icon at the top right corner of the alert
 
 - **Alternate Postconditions:**
+
   - User is navigated back to the todo list
   - The todo item remains the same
 
@@ -175,8 +179,11 @@
   - User is navigated back to the email page
 
 - **Alternate Sequence:**
+
   - User clicks Cancel button
+
 - **Alternate Postconditions:**
+
   - User lost everything they inputed
   - User is navigated back to the email page
 
@@ -202,6 +209,7 @@
   - User is directed to the main page.
 
 - **Alternate Sequence:**
+
   - User enters the contact that already added.
   - “Contact already added” message appears on the screen.
   - User clicks the Cancel button and exits the box.
@@ -228,6 +236,7 @@
   - The deleted contact is removed from the contact list.
 
 - **Alternate Sequence:**
+
   - User is unable to find the desired contact.
   - User clicks on sort Alphabetically.
   - User finds the contacts, selects, removes the contact.
@@ -235,11 +244,13 @@
 ### 8. view message history
 
 - **Pre-condition:**
+
 - The user has access to the internet and a web browser
 - The web application is live and accessible by the user
 - User has navigated to the message list and is logged in
 
 - **Trigger:**
+
   -User has cliked on the message history button
 
 - **Primary Sequence:**
@@ -257,8 +268,11 @@
   - User is navigated to the list of unknown senders messages
 
 - **Alternate Sequence:**
+
   - User clicks main page button
+
 - **Alternate Postconditions:**
+
   - If the web application encounters an error, it asks the user to try again later
 
 ### 9. Remind messages
@@ -293,4 +307,5 @@
   - User clicks to turn off notification button
 
 - **Alternate Postconditions:**
+
   - If the web application encounters an error, it asks the user to try again later

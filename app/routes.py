@@ -1,6 +1,6 @@
 from app import myapp_obj
 from flask import render_template, redirect, url_for, request, flash, session
-from app.forms import registerForm, login_page
+from app.forms import registerForm, login_page, change_credential_form
 from app import models
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
@@ -19,9 +19,11 @@ def to_home():
 def login():
     loginform = login_page.loginForm()
     if(request.method == 'POST'):
-        if loginform.validate_on_submit() & login_page.loginFunctions.validate_login(loginform) :
+        valid_login, userId = login_page.loginFunctions.validate_login(loginform)
+        if loginform.validate_on_submit() & valid_login:
             session['logged_in'] = True
             session['email'] = loginform.email.data
+            session['userId'] = userId
             return redirect(url_for('emails'))
     return render_template('login.html', title="login", form=loginform)
 
@@ -56,6 +58,7 @@ def todo():
 
 
 @myapp_obj.route("/emails",methods=['GET', 'POST'])
+@login_page.loginFunctions.required_login
 def emails():
     if request.method == 'POST':
         dbSession = models.Session()
@@ -79,7 +82,7 @@ def emails():
                 flash('Recipient not found',category='error')
         else:
             flash('Message is not sent',category='error')
-    return render_template('emails.html')
+    return render_template('emails.html', title="emails")
 
 
 @myapp_obj.route("/delete", methods=['GET', 'POST'])
@@ -104,3 +107,16 @@ def logout():
     session.clear()
     return redirect(url_for('login'))
 
+@myapp_obj.route("/settings", methods=["POST", "GET"])
+@login_page.loginFunctions.required_login
+def settings():
+    credential_Form = change_credential_form.ChangeCredentialForm()
+    if registerForm.RegisterFunction.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data):
+        dbSession = models.Session()
+        user = dbSession.query(models.user).filter_by(id=session['userId']).first()
+        if credential_Form.newEmail.data != "":
+            user.email = credential_Form.newEmail.data
+        if credential_Form.newPassword.data != "":
+            user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
+        dbSession.commit()
+    return render_template('settings.html', title="settings", credential_Form=credential_Form)
