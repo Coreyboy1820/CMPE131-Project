@@ -26,9 +26,8 @@ class loginFunctions():
         dbSession = models.Session()
         dbUser = dbSession.query(models.user).filter_by(email=user.email.data).all()
         dbSession.close()
-        print(dbSession.is_active)
         # Perform hashing function here
         if dbUser:
-            if (check_password_hash(dbUser[0].passwordHash, user.password.data)):
+            if (check_password_hash(dbUser[0].passwordHash, user.password.data) and dbUser[0].active):
                 return True, dbUser[0].id
         return False, 0
