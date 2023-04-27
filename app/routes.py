@@ -120,3 +120,28 @@ def settings():
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
         dbSession.commit()
     return render_template('settings.html', title="settings", credential_Form=credential_Form)
+
+@myapp_obj.route('/add_todo_item', methods=['POST'])
+def add_todo_item():
+    # retrieve the form data
+    priority = request.form['priority']
+    start_date = request.form['start-date']
+    due_date = request.form['due-date']
+    status = request.form['status']
+    list_id = request.form['list-id']
+
+    # create a new todoItem instance
+    new_item = models.todoItem(priority=priority, startDate=start_date, dueDate=due_date, status=status)
+
+    # retrieve the todoList instance to add the todoItem to
+    dbSession = models.Session()
+    todo_list = dbSession.query(models.todoList).filter_by(userId=1, id=list_id).first()
+
+    # add the new todoItem to the todoList
+    todo_list.todoItems.append(new_item)
+
+    # commit the changes to the database session
+    dbSession.commit()
+
+    # render a success message to the user
+    return render_template('add_todo_item_success.html')
