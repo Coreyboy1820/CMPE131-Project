@@ -104,3 +104,41 @@ def settings():
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
         dbSession.commit()
     return render_template('settings.html', title="settings", credential_Form=credential_Form)
+
+@myapp_obj.route("/addContact", methods=["POST", "GET"])
+@login_page.loginFunctions.required_login
+def addContact():
+    if request.method == 'POST':
+        dbSession = models.Session()
+        addedUserEmail = request.form['email']
+        # if the email that we add is the registered email
+        if (dbSession.query(models.user).filter_by(email=addedUserEmail).first() is not None):
+            # get the user added id
+            addedUserId = dbSession.query(models.user).filter_by(email=addedUserEmail).first().id
+
+            # get current user id 
+            currentUserId = session.get('userId')
+
+             # get the user added nickname
+            addedUserNickname = request.form['name']
+
+            # if the user has not already been added to the contact list
+            print(dbSession.query(models.userContact).filter_by(contactId=addedUserId, userId = session['userId']).first())
+            if (dbSession.query(models.userContact).filter_by(contactId=addedUserId).first() is None):
+                # create a contactuser object (userID, contactiD, nickname)
+                addedUserId = dbSession.query(models.userContact).order_by(models.userContact.id.desc()).first().id
+                addedUser = models.userContact(id=addedUserId+1,userId= currentUserId, contactId= addedUserId, nickName=addedUserNickname)
+                # add data to database
+                dbSession.add(addedUser)
+                dbSession.commit()
+                dbSession.close()
+                for userContact in dbSession.query(models.userContact).all():
+                    print(userContact)
+                flash('New user has been added to your contact list')
+
+            # if the user has been added to the contact list
+            else:
+                flash('User is already added in your contact list',category='error')
+        else:
+            flash('The email you are adding has not been registered', category='error')
+    return render_template('addContact.html')

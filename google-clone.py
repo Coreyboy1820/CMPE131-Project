@@ -5,6 +5,13 @@ from datetime import date
 myapp_obj.debug=True
 myapp_obj.config['SECRET_KEY'] = secrets.token_hex(16)
 
+
+# dbSession = models.Session()
+# usercontact = models.userContact(id=0, userId=1, contactId=2, nickName='Phong')
+# dbSession.add(usercontact)
+# dbSession.commit()
+# dbSession.close()
+
 # u = models.user(email="nobito@gmailclone.com", passwordHash="nobito")
 # u1 = models.user(email="khate22@gmailclone.com", passwordHash="khate22")
 # u2 = models.user(email="lenat44@gmailclone.com", passwordHash="lenat44")
