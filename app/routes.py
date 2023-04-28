@@ -153,3 +153,28 @@ def settings():
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
         dbSession.commit()
     return render_template('settings.html', title="settings", credential_Form=credential_Form)
+
+@myapp_obj.route("/addContact", methods=["POST", "GET"])
+@login_page.loginFunctions.required_login
+def addContact():
+    if request.method == 'POST':
+        dbSession = models.Session()
+        addedUserEmail = request.form['email'] # verified
+        addedUserNickname = request.form['name'] # verified
+        addedUser = dbSession.query(models.user).filter_by(email=addedUserEmail).first()
+        if addedUser is not None:  # verified
+            contact = dbSession.query(models.userContact).filter_by(userId=session["userId"], contactId=addedUser.id).first()
+            if contact is None:
+                cid=dbSession.query(models.userContact).order_by(models.userContact.id.desc()).first().id
+                newContact = models.userContact(id=cid+1, userId=session["userId"], contactId=addedUser.id, nickName=addedUserNickname) # verified
+                dbSession.add(newContact)
+                dbSession.commit()
+                flash("User has been added succesfully")
+            else:
+                flash("Contact already exists", category="error")
+        else:
+            flash("User does not exist", category="error")
+        dbSession.close()
+
+        
+    return render_template('addContact.html')
