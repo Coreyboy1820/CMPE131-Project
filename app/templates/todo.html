@@ -4,30 +4,39 @@
     <body>
         {% block navbar%}
         {% endblock %}
-        <div class="container">
-            <button type="button" data-toggle="modal" data-target="#add-todo-modal">Change Credentials</button>
+      <div class="page">
+          {% for todo_list in todo_lists %}
+          <div class="todoListBox">
+            <h1 style="border-bottom: solid; border-width: 1px;">{{todo_list.name}}</h1>
+            <ul>
+            {% for todo_item in todo_list.todoItems %}
+              <li style="word-wrap: break-word; padding: 5px">
+                <b>Name:</b> {{ todo_item.name }}<br>
+                <b>Priority:</b> {{ todo_item.priority }}<br>
+                <b>Start Date:</b> {{ todo_item.startDate }}<br>
+                <b>Due Date:</b> {{ todo_item.dueDate }}<br>
+                <b>Status:</b> {{ todo_item.status }}<br>
+              </li>
+            {% endfor %}
+            </ul>
+            <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-todo-modal">Add Todo Item</button>
           </div>
-              <!-- Change Credentials Modal -->
-        <div class="modal" id="add-todo-modal">
+          {% endfor %}
+          <button type="button" data-toggle="modal" data-target="#add-todo-list-modal">Add Todo List</button>
+              <!-- Add todo item Modal -->
+        <div class="modal" id="add-todo-list-modal">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h4 class="modal-title">Add Todo</h4>
+                <h4 class="modal-title">Add Todo List</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                <form id="compose-form" action="/todo" method="POST" >
+                <form id="add-todo-list-form" action="/todo" method="POST" >
                   <p>
-                  {{ credential_Form.newEmail.label }} {{ credential_Form.newEmail() }}<br>
+                  {{ todo_list_form.listName.label }} {{ todo_list_form.listName() }}<br>
                   </p>
-                  <p>
-                  {{ credential_Form.newPassword.label }} {{ credential_Form.newPassword() }}<br>
-                  </p>
-                  <p>
-                  {{ credential_Form.confirmNewPassword.label }} {{ credential_Form.confirmNewPassword() }}<br>
-                  </p>
-                  <p>
-                  {{ credential_Form.submit() }}
+                  {{ todo_list_form.submitList() }}
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   </p>
                 </form>
@@ -36,5 +45,48 @@
             </div>
           </div>
         </div>
+        <!-- Add todo list Modal -->
+        <div class="modal" id="add-todo-modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Add Todo Item</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <form id="add-todo-item-form" action="/todo" method="POST" >
+                    {{ todo_item_form.todoListId() }}
+                  <p>
+                    {{ todo_item_form.itemName.label }} {{ todo_item_form.itemName() }}<br>
+                  </p>
+                  <p>
+                    {{ todo_item_form.startDate.label }} {{ todo_item_form.startDate() }}<br>
+                    </p>
+                  <p>
+                  {{ todo_item_form.dueDate.label }} {{ todo_item_form.dueDate() }}<br>
+                  </p>
+                  <p>
+                  {{ todo_item_form.priority.label }} {{ todo_item_form.priority() }}<br>
+                  </p>
+                  <p>
+                  {{ todo_item_form.submitItem() }}
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </p>
+                </form>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </body>
+
+    <script type="text/javascript">
+      $("button[name='todoItemButton']").click(function (e) {
+          var listId = e.target.getAttribute("id");
+          var todolistIdField = document.getElementById("todoListId");
+          todolistIdField.style.display = "none";
+          todolistIdField.value = listId;
+      });
+    </script>
 </html>

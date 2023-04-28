@@ -5,12 +5,12 @@ from wtforms.validators import DataRequired
 
 class NewTodoForm(FlaskForm):
     todoListId = IntegerField('todoListId', validators=[DataRequired()])
+    itemName = StringField('Name', validators=[DataRequired()])
     priority = IntegerField('Priority Level', validators=[DataRequired()])
     startDate = DateField('Start Date', validators=[DataRequired()])
     dueDate = DateField('Due Date', validators=[DataRequired()])
-    status = BooleanField('status', validators=[DataRequired()])
-    submit = SubmitField('Add Item')
+    submitItem = SubmitField('Add Item')
 
 class NewTodoListForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    submit = SubmitField('Create List')
+    listName = StringField('Name', validators=[DataRequired()])
+    submitList = SubmitField('Create List')

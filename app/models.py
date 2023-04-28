@@ -40,7 +40,7 @@ class todoList(Base):
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     name = db.Column(db.String(255))
 
-    todoItems = relationship("todoItem")
+    todoItems = relationship("todoItem", lazy="subquery")
     sharedUsers = relationship("todoListSharedUser")
 
 class todoItem(Base):
@@ -48,10 +48,11 @@ class todoItem(Base):
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     todoListId = db.Column(db.Integer, ForeignKey("todoList.id"), primary_key=True)
+    name = db.Column(db.String(255))
     priority = db.Column(db.Integer)
     startDate = db.Column(db.Date)
     dueDate = db.Column(db.Date)
-    status = db.Column(db.Boolean)
+    status = db.Column(db.Boolean, default=False)
 
 class userContact(Base):
     __tablename__ = "userContact"

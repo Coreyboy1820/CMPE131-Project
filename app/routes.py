@@ -51,35 +51,40 @@ def register():
 def todo():
     new_todo_list_form = new_todo_form.NewTodoListForm()
     new_todo_item_form = new_todo_form.NewTodoForm()
+    dbSession = models.Session()
     if request.method == 'POST':
-        if new_todo_list_form.name.data != "":
+        if new_todo_list_form.submitList.data:
             
             # create a new todoItem instance
-            new_todo_list = models.todoList(name=new_todo_list_form.name.data, userId=session['userId'])
+            lastListId = dbSession.query(models.todoList).order_by(models.todoList.id.desc()).first().id
+            new_todo_list = models.todoList(id=lastListId+1, name=new_todo_list_form.listName.data, userId=session['userId'])
 
             # retrieve the todoList instance to add the todoItem to
-            dbSession = models.Session()
 
             dbSession.add(new_todo_list)
 
             # commit the changes to the database session
             dbSession.commit()
             dbSession.close()
-        if new_todo_item_form.priority.data:
+            return redirect(url_for("todo"))
+        if new_todo_item_form.submitItem.data:
         
             # create a new todoItem instance
-            new_todo_item = models.todoItem(todoListId=new_todo_item_form.todoListId.data, priority=new_todo_item_form.priority.data, startDate=new_todo_item_form.startDate.data, dueDate=new_todo_item_form.dueDate.data, status=new_todo_item_form.status.data)
+            lastItemeId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
+            new_todo_item = models.todoItem(id=lastItemeId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.priority.data, 
+                                            startDate=new_todo_item_form.startDate.data, dueDate=new_todo_item_form.dueDate.data)
 
             # retrieve the todoList instance to add the todoItem to
-            dbSession = models.Session()
 
             dbSession.add(new_todo_item)
 
             # commit the changes to the database session
             dbSession.commit()
             dbSession.close()
-
-    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form)
+            return redirect(url_for("todo"))
+    todo_lists= dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
+    dbSession.close()
+    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, todo_lists = todo_lists)
 
 
 
@@ -148,28 +153,3 @@ def settings():
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
         dbSession.commit()
     return render_template('settings.html', title="settings", credential_Form=credential_Form)
-
-@myapp_obj.route('/add_todo_item', methods=['POST'])
-def add_todo_item():
-    # retrieve the form data
-    priority = request.form['priority']
-    start_date = request.form['start-date']
-    due_date = request.form['due-date']
-    status = request.form['status']
-    list_id = request.form['list-id']
-
-    # create a new todoItem instance
-    new_item = models.todoItem(priority=priority, startDate=start_date, dueDate=due_date, status=status)
-
-    # retrieve the todoList instance to add the todoItem to
-    dbSession = models.Session()
-    todo_list = dbSession.query(models.todoList).filter_by(userId=1, id=list_id).first()
-
-    # add the new todoItem to the todoList
-    todo_list.todoItems.append(new_item)
-
-    # commit the changes to the database session
-    dbSession.commit()
-
-    # render a success message to the user
-    return render_template('add_todo_item_success.html')
