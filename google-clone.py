@@ -5,6 +5,7 @@ from datetime import date
 myapp_obj.debug=True
 myapp_obj.config['SECRET_KEY'] = secrets.token_hex(16)
 
+<<<<<<< HEAD
 
 # dbSession = models.Session()
 # usercontact = models.userContact(id=0, userId=1, contactId=2, nickName='Phong')
@@ -51,6 +52,9 @@ myapp_obj.config['SECRET_KEY'] = secrets.token_hex(16)
 # session.add(u2)
 # session.commit()
 
+=======
+models.database_setup()
+>>>>>>> main
 
 if __name__ == "__main__":
     myapp_obj.run(port=5000)
