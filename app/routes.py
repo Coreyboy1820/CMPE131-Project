@@ -1,6 +1,6 @@
 from app import myapp_obj
 from flask import render_template, redirect, url_for, request, flash, session
-from app.forms import registerForm, login_page, change_credential_form
+from app.forms import registerForm, login_page, change_credential_form, contactForm
 from app import models
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
@@ -119,4 +119,16 @@ def settings():
         if credential_Form.newPassword.data != "":
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
         dbSession.commit()
-    return render_template('settings.html', title="settings", credential_Form=credential_Form)
+    return render_template('settings.html', title="settings", credential_Form=credential_Form
+                        
+@myapp_obj.route("/add_contact", methods=["POST", "GET"])
+def addContact():
+    form = AddContactForm()
+    if contactForm.validate_on_submit():
+        contact = user.query.filter_by(email=form.email.data).first()
+        if contact:
+            newcontact = userContact(userId=user.id, contactId=contact.id, nickName=form.nickname.data)
+            db.session.add(newcontact)
+            db.session.commit()
+            return redirect(url_for('home'))
+    return render_template('addcontact.html', title="Add Contact", contactForm=form)
