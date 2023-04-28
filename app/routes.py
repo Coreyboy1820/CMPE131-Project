@@ -82,6 +82,7 @@ def emails():
                 flash('Recipient not found',category='error')
         else:
             flash('Message is not sent',category='error')
+    print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().messages)
     receivedEmails = dbSession.query(models.user).filter_by(email=currentUserEmail).first().messages
     return render_template('emails.html', title="emails", receivedEmails= receivedEmails)
 
