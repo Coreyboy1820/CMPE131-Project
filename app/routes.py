@@ -65,25 +65,36 @@ def emails():
     if request.method == 'POST':
         # check if data is send to the server succesfully
         if 'to' and 'subject' and 'body' in request.form:
-            to = request.form['to']
-            # if the recepient is valid
-            if(dbSession.query(models.user).filter_by(email=to).first() is not None):
-                subject = request.form['subject']
-                body = request.form['body']
-                current_date = date.today()
-                # print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().id )
-                lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
-                message = models.message(id=lastMessageId+1, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject )
-                dbSession.add(message)
-                dbSession.commit()
-                dbSession.close()
-                flash('Message is sent successfully')
-            else:
-                flash('Recipient not found',category='error')
+            receipients = request.form['to'].split(" ")
+            for to in receipients:
+                # if the recepient is valid
+                userTo= dbSession.query(models.user).filter_by(email=to).first()
+                if(userTo is not None):
+                    subject = request.form['subject']
+                    body = request.form['body']
+                    current_date = date.today()
+                    # print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().id )
+                    lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
+                    messageId = lastMessageId+1
+                    message = models.message(id=messageId, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
+                    lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
+                    receipientId = lastreceipientId+1
+                    receipient = models.recipient(id= receipientId ,userId= userTo.id, messageId=messageId)
+                    dbSession.add(receipient)
+                    dbSession.add(message)
+                    dbSession.commit()
+                    dbSession.close()
+                    flash('Message is sent successfully')
+                else:
+                    flash('Recipient not found',category='error')
         else:
             flash('Message is not sent',category='error')
-    print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().messages)
-    receivedEmails = dbSession.query(models.user).filter_by(email=currentUserEmail).first().messages
+    messages = dbSession.query(models.message).all()
+    receivedEmails = []
+    for message in messages:
+        for receipient in message.recipients:
+            if (session.get('userId') == receipient.user.id):
+                receivedEmails.append(message)
     return render_template('emails.html', title="emails", receivedEmails= receivedEmails)
 
    
