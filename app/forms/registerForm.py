@@ -5,8 +5,6 @@ from app import models
 from flask import flash
 
 class RegisterForm(FlaskForm):
-      # the text input that takes email input from user. Required Field. Must be a valid email
-     # pip install email_validator or  # pip3 install email_validator (need to install email_validator package so that flask can validate the email type)
       email = StringField('Email', validators=[DataRequired(), Email()])  
 
       # the text input that takes password input from user. Required
