@@ -53,31 +53,16 @@
     <div class="email-container">
       <div class="email-list">
         <ul class="list-group">
-          {% for email in emails %}
-          <li class="list-group-item {% if email.read %}list-group-item-secondary{% else %}list-group-item-light{% endif %}">
-            <a href="/emails/{{ email.id }}">
-              {% if email.read %}
-              <strong>{{ email.subject }}</strong>
-              {% else %}
-              {{ email.subject }}
-              {% endif %}
-              <br>
-              <small>{{ email.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
-            </a>
-          </li>
+          {% for email in receivedEmails %}
+              <li> 
+                  <div>
+                      <pi>Subject: {{email.subject}}</pi>
+                      <pi>Received date: {{email.recievedDate}}</pi>
+                      <pi>Subject: {{email. message}}</pi>
+                  </div>
+              </li>
           {% endfor %}
         </ul>
-      </div>
-      <div class="email-display">
-        {% if email %}
-        <h2>{{ email.subject }}</h2>
-        <p>From: {{ email.sender }}</p>
-        <p>To: {{ email.recipients }}</p>
-        <p>Timestamp: {{ email.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-        <p>{{ email.body }}</p>
-        {% else %}
-        <p>No email selected.</p>
-        {% endif %}
       </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

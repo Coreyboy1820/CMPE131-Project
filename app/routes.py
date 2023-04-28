@@ -60,9 +60,9 @@ def todo():
 @myapp_obj.route("/emails",methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def emails():
+    currentUserEmail = session.get('email') # this session is imported from flask
+    dbSession = models.Session()
     if request.method == 'POST':
-        dbSession = models.Session()
-        currentUserEmail = session.get('email')  # this session is imported from flask
         # check if data is send to the server succesfully
         if 'to' and 'subject' and 'body' in request.form:
             to = request.form['to']
@@ -82,7 +82,8 @@ def emails():
                 flash('Recipient not found',category='error')
         else:
             flash('Message is not sent',category='error')
-    return render_template('emails.html', title="emails")
+    receivedEmails = dbSession.query(models.user).filter_by(email=currentUserEmail).first().messages
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails)
 
    
 
