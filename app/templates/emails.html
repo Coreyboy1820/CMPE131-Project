@@ -18,11 +18,80 @@
   {% endfor %}
 {% endif %}
 {% endwith %}
-  <head>
-  </head>
+<head>
+  <title>View Email</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .email-container{
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+    }
+    .email-list{
+      width: 70%;
+      border-right: 1px solid #cccccc;
+      overflow-y: scroll;
+    }
+    .email-display{
+      width: 70%;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+
+
+
+
+
+
   <body>
     {% block navbar%}
     {% endblock %}
+
+
+    <div class="email-container">
+      <div class="email-list">
+        <ul class="list-group">
+          {% for email in emails %}
+          <li class="list-group-item {% if email.read %}list-group-item-secondary{% else %}list-group-item-light{% endif %}">
+            <a href="/emails/{{ email.id }}">
+              {% if email.read %}
+              <strong>{{ email.subject }}</strong>
+              {% else %}
+              {{ email.subject }}
+              {% endif %}
+              <br>
+              <small>{{ email.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="email-display">
+        {% if email %}
+        <h2>{{ email.subject }}</h2>
+        <p>From: {{ email.sender }}</p>
+        <p>To: {{ email.recipients }}</p>
+        <p>Timestamp: {{ email.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p>{{ email.body }}</p>
+        {% else %}
+        <p>No email selected.</p>
+        {% endif %}
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+
     <div class="container">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#compose-modal">Compose Email</button>
     </div>
