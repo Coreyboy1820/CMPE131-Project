@@ -1,7 +1,6 @@
-from app import myapp_obj
+from app import myapp_obj, models
 from flask import render_template, redirect, url_for, request, flash, session
-from app.forms import registerForm, login_page, change_credential_form
-from app import models
+from app.forms import registerForm, login_page, change_credential_form, new_todo_form
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
 
@@ -32,7 +31,6 @@ def login():
 @myapp_obj.route("/register",methods=['GET', 'POST'])
 def register():
     register = registerForm.RegisterForm()
-    # u = models.user(email="nobito@gmailclone.com", passwordHash="nobito")
     if (request.method == 'POST'):
         if registerForm.RegisterFunction.validate(register.email.data, register.password.data, register.confirmPassword.data):
             flash('You have successfully registered')
@@ -48,10 +46,40 @@ def register():
 
 
 
-@myapp_obj.route("/todo")
+@myapp_obj.route("/todo", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def todo():
-    return render_template('todo.html', title="todo", user='Corey')
+    new_todo_list_form = new_todo_form.NewTodoListForm()
+    new_todo_item_form = new_todo_form.NewTodoForm()
+    if request.method == 'POST':
+        if new_todo_list_form.name.data != "":
+            
+            # create a new todoItem instance
+            new_todo_list = models.todoList(name=new_todo_list_form.name.data, userId=session['userId'])
+
+            # retrieve the todoList instance to add the todoItem to
+            dbSession = models.Session()
+
+            dbSession.add(new_todo_list)
+
+            # commit the changes to the database session
+            dbSession.commit()
+            dbSession.close()
+        if new_todo_item_form.priority.data:
+        
+            # create a new todoItem instance
+            new_todo_item = models.todoItem(todoListId=new_todo_item_form.todoListId.data, priority=new_todo_item_form.priority.data, startDate=new_todo_item_form.startDate.data, dueDate=new_todo_item_form.dueDate.data, status=new_todo_item_form.status.data)
+
+            # retrieve the todoList instance to add the todoItem to
+            dbSession = models.Session()
+
+            dbSession.add(new_todo_item)
+
+            # commit the changes to the database session
+            dbSession.commit()
+            dbSession.close()
+
+    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form)
 
 
 
