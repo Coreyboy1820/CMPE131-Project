@@ -118,11 +118,13 @@ def emails():
                     dbSession.commit()
                     dbSession.close()
                     flash('Message is sent successfully')
+                    return redirect(url_for("emails"))
                 else:
                     flash('Recipient not found',category='error')
         else:
             flash('Message is not sent',category='error')
     messages = dbSession.query(models.message).all()
+    dbSession.close()
     receivedEmails = []
     for message in messages:
         for receipient in message.recipients:
