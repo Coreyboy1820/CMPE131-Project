@@ -64,4 +64,4 @@ want to send that contact and email.
 
 
 ## Database Schema
-![Alt text](Database_schema.png?raw=true)
+![Alt text](pictures/Database_schema.png?raw=true)
