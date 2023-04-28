@@ -140,10 +140,12 @@
   - User clicks Ok button
 
 - **Primary Postconditions:**
+
   - User is navigated back to the todo list
   - The todo item is now gone
 
 - **Alternate Sequence:**
+
   - User clicks Cancel button in the final confirmation alert
   - User is navigated back to the initial alert
   - User clicks the x icon at the top right corner of the alert
@@ -172,6 +174,7 @@
   - User clicks the send button
 
 - **Primary Postconditions:**
+
   - The confirmation alert pops up indicating the email was successfully sent
   - User is navigated back to the email page
 

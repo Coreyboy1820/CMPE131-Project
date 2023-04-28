@@ -76,8 +76,8 @@ class message(Base):
     recievedDate = db.Column(db.Date)
     subject = db.Column(db.String(255))
 
-    sender = relationship("user", overlaps="messages", foreign_keys="message.senderId")
-    recipients = relationship("recipient")
+    sender = relationship("user", overlaps="messages", foreign_keys="message.senderId", lazy="subquery")
+    recipients = relationship("recipient", lazy="subquery")
 
 
 class recipient(Base):
@@ -87,7 +87,7 @@ class recipient(Base):
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     messageId = db.Column(db.Integer, ForeignKey("message.id"), primary_key=True)
 
-    user = relationship("user", foreign_keys="recipient.userId")
+    user = relationship("user", foreign_keys="recipient.userId", lazy="subquery")
 
 
 
@@ -104,10 +104,16 @@ def database_setup():
         initialTodoList = todoList(id=0, userId=0, name="initial")
         intialTodoItem = todoItem(id=0, todoListId=0, name="initial", priority=0, startDate=current_date, dueDate=current_date, status=False)
         initialMessage = message(id=0, senderId=0, sentDate=current_date, recievedDate=current_date, subject= "initial" )
+        intialRecipient = recipient(id=0, userId=0, messageId=0)
+        initialContact = userContact(id=0, userId=0, contactId=0, nickName="initial")
+        initialSharedUser = todoListSharedUser(id=0, todoListId=0, sharedWithUserId=0)
         dbSession.add(initialUser)
         dbSession.add(initialTodoList)
         dbSession.add(intialTodoItem)
         dbSession.add(initialMessage)
+        dbSession.add(intialRecipient)
+        dbSession.add(initialContact)
+        dbSession.add(initialSharedUser)
         dbSession.commit()
 
     dbSession.close()
