@@ -111,11 +111,14 @@ def addContact():
     if request.method == 'POST':
         dbSession = models.Session()
         addedUserEmail = request.form['email']
-        # if the email that we add is the registered email
-        if (dbSession.query(models.user).filter_by(email=addedUserEmail).first() is not None):
-            # get the user added id
-            addedUserId = dbSession.query(models.user).filter_by(email=addedUserEmail).first().id
+        print(addedUserEmail)
 
+        # if the email that we add is the registered email
+        addedUser = dbSession.query(models.user).filter_by(email=addedUserEmail).first()
+        if (addedUser is not None):
+            # get the user added id
+            addedUserId = addedUser.id
+            print(addedUser.email)
             # get current user id 
             currentUserId = session.get('userId')
 
@@ -123,8 +126,14 @@ def addContact():
             addedUserNickname = request.form['name']
 
             # if the user has not already been added to the contact list
-            print(dbSession.query(models.userContact).filter_by(contactId=addedUserId, userId = session['userId']).first())
-            if (dbSession.query(models.userContact).filter_by(contactId=addedUserId).first() is None):
+            contacts = dbSession.query(models.userContact).filter_by(userId = currentUserId).all()
+            is_new_contact = True
+            
+            for contact in contacts:
+                print(contact.contact)
+                if (contact.contactId == addedUserId):
+                    is_new_contact = False
+            if is_new_contact:
                 # create a contactuser object (userID, contactiD, nickname)
                 addedUserId = dbSession.query(models.userContact).order_by(models.userContact.id.desc()).first().id
                 addedUser = models.userContact(id=addedUserId+1,userId= currentUserId, contactId= addedUserId, nickName=addedUserNickname)
@@ -132,12 +141,13 @@ def addContact():
                 dbSession.add(addedUser)
                 dbSession.commit()
                 dbSession.close()
-                for userContact in dbSession.query(models.userContact).all():
-                    print(userContact)
+                # for userContact in dbSession.query(models.userContact).all():
+                    # print(userContact)
                 flash('New user has been added to your contact list')
 
             # if the user has been added to the contact list
             else:
+                dbSession.close()
                 flash('User is already added in your contact list',category='error')
         else:
             flash('The email you are adding has not been registered', category='error')
