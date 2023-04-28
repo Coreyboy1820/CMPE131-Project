@@ -1,4 +1,6 @@
 from app import db
+from datetime import date
+from werkzeug.security import generate_password_hash
 from sqlalchemy import ForeignKey, create_engine
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -92,3 +94,21 @@ class recipient(Base):
 engine = create_engine('sqlite:///site.db')
 Session = sessionmaker(bind=engine) # the class that we can use to create an instance which can be used to interact with database such as: add, remove, delete...
 Base.metadata.create_all(engine)  # this class will take all the classes that inherited Base and connect them in the database so it connects to the engine and create all the tables
+
+def database_setup():
+    dbSession = Session()
+
+    if dbSession.query(todoList).first() is None:
+        current_date = date.today()
+        initialUser = user(id=0, email="initial@gmailclone.com", passwordHash=generate_password_hash("initial"))
+        initialTodoList = todoList(id=0, userId=0, name="initial")
+        intialTodoItem = todoItem(id=0, todoListId=0, name="initial", priority=0, startDate=current_date, dueDate=current_date, status=False)
+        initialMessage = message(id=0, senderId=0, sentDate=current_date, recievedDate=current_date, subject= "initial" )
+        dbSession.add(initialUser)
+        dbSession.add(initialTodoList)
+        dbSession.add(intialTodoItem)
+        dbSession.add(initialMessage)
+        dbSession.commit()
+
+    dbSession.close()
+    return
