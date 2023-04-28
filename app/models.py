@@ -11,8 +11,9 @@ class user(Base):
     __tablename__ = "user" # table name of the database
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    email = db.Column(db.String(255), unique=True )
+    email = db.Column(db.String(255), unique=True)
     passwordHash = db.Column(db.Text, unique=False)
+    active = db.Column(db.Boolean, default=True)
 
     todoList = relationship("todoList")
     contactList = relationship("userContact", foreign_keys="userContact.contactId")
@@ -39,7 +40,7 @@ class todoList(Base):
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     name = db.Column(db.String(255))
 
-    todoItems = relationship("todoItem")
+    todoItems = relationship("todoItem", lazy="subquery")
     sharedUsers = relationship("todoListSharedUser")
 
 class todoItem(Base):
@@ -47,10 +48,11 @@ class todoItem(Base):
 
     id = db.Column(db.Integer, unique=True, primary_key=True)
     todoListId = db.Column(db.Integer, ForeignKey("todoList.id"), primary_key=True)
+    name = db.Column(db.String(255))
     priority = db.Column(db.Integer)
     startDate = db.Column(db.Date)
     dueDate = db.Column(db.Date)
-    status = db.Column(db.Boolean)
+    status = db.Column(db.Boolean, default=False)
 
 class userContact(Base):
     __tablename__ = "userContact"
