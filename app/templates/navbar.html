@@ -45,15 +45,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <div class="navbar">
     {% if title != "login" and title != "register" %}
-        <button onclick="window.location.href='/home'">Home</button>
-        <button onclick="window.location.href='/emails'">Emails</button>
-        <button onclick="window.location.href='/todo'">Todo</button>
-        <button onclick="window.location.href='/settings'">Settings</button>
-        <button onclick="window.location.href='/logout'">Logout</button>
+        <button class="btn btn-primary" onclick="window.location.href='/home'">Home</button>
+        <button class="btn btn-primary" onclick="window.location.href='/emails'">Emails</button>
+        <button class="btn btn-primary" onclick="window.location.href='/todo'">Todo</button>
+        <button class="btn btn-primary" onclick="window.location.href='/settings'">Settings</button>
+        <button class="btn btn-primary" onclick="window.location.href='/logout'">Logout</button>
     {% elif title == "register" %}
-        <button onclick="window.location.href='/login'">Login</button>
+        <button class="btn btn-primary" onclick="window.location.href='/login'">Login</button>
     {% else %}
-        <button onclick="window.location.href='/register'">Register</button>
+        
     {% endif %}
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

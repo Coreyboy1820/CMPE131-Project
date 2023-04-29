@@ -83,7 +83,7 @@ def todo():
                 # commit the changes to the database session
                 dbSession.commit()
                 dbSession.close()
-                flash('Item is added successfully')
+                flash('Item is added successfully', category="success")
             else:
                 flash('Start date must be before Due Date',category="error")
             return redirect(url_for("todo"))
@@ -123,7 +123,7 @@ def emails():
                     dbSession.commit()
                     dbSession.close()
                     flash('Message is sent successfully')
-                    return redirect(url_for("emails"))
+                    return redirect(url_for("emails"), category="success")
                 else:
                     flash('Recipient not found',category='error')
         else:
@@ -189,7 +189,7 @@ def addContact():
                 newContact = models.userContact(id=cid+1, userId=session["userId"], contactId=addedUser.id, nickName=addedUserNickname) # verified
                 dbSession.add(newContact)
                 dbSession.commit()
-                flash("User has been added succesfully")
+                flash("User has been added succesfully", category="success")
             else:
                 flash("Contact already exists", category="error")
         else:

@@ -9,7 +9,7 @@
         {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    {% else %}
+    {% elif category == "success" %}
     <div class="alert alert-success alter-dismissible fade show" role="alert">
         {{ message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -20,15 +20,17 @@
     {% endwith %}
     <body>
         <div class="page">
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            {{ form.email.label }} {{ form.email() }}<br>
-            {{ form.password.label }} {{ form.password() }}<br>
-            {{ form.submit() }}
-            {% block navbar%}
-            <button onclick="window.location.href='/register'">Register</button>
-            {% endblock %}
-        </form>
+            <div class="container">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.email.label }} {{ form.email() }}<br>
+                {{ form.password.label }} {{ form.password() }}<br>
+                {{ form.submit(class="btn btn-primary") }}
+                {% block navbar%}
+                <button class="btn btn-primary" onclick="window.location.href='/register'">Register</button>
+                {% endblock %}
+            </form>
+        </div>
     </div>
     </body>
 </html>
