@@ -77,7 +77,9 @@ class message(Base):
     subject = db.Column(db.String(255))
 
     sender = relationship("user", overlaps="messages", foreign_keys="message.senderId", lazy="subquery")
-    recipients = relationship("recipient", lazy="subquery")
+    # Lazy subquery makes it so the relationships are querried for when the messages are querried for. This allows you
+    # to access the recipients when the database is close and does it all at once.
+    recipients = relationship("recipient", lazy="subquery")                                             
 
 
 class recipient(Base):
@@ -95,9 +97,9 @@ engine = create_engine('sqlite:///site.db')
 Session = sessionmaker(bind=engine) # the class that we can use to create an instance which can be used to interact with database such as: add, remove, delete...
 Base.metadata.create_all(engine)  # this class will take all the classes that inherited Base and connect them in the database so it connects to the engine and create all the tables
 
+# Database will error out on database creation if this function is not ran first, it will insert a default value for each entry
 def database_setup():
     dbSession = Session()
-
     if dbSession.query(todoList).first() is None:
         current_date = date.today()
         initialUser = user(id=0, email="initial@gmailclone.com", passwordHash=generate_password_hash("initial"))
