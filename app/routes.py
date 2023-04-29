@@ -68,19 +68,24 @@ def todo():
             dbSession.close()
             return redirect(url_for("todo"))
         if new_todo_item_form.submitItem.data:
-        
-            # create a new todoItem instance
-            lastItemeId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
-            new_todo_item = models.todoItem(id=lastItemeId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.priority.data, 
-                                            startDate=new_todo_item_form.startDate.data, dueDate=new_todo_item_form.dueDate.data)
+            startDate = new_todo_item_form.startDate.data
+            dueDate = new_todo_item_form.dueDate.data
+            if (startDate <dueDate):
+                # create a new todoItem instance
+                lastItemeId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
+                new_todo_item = models.todoItem(id=lastItemeId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.priority.data, 
+                                                startDate=startDate, dueDate=dueDate)
 
-            # retrieve the todoList instance to add the todoItem to
+                # retrieve the todoList instance to add the todoItem to
 
-            dbSession.add(new_todo_item)
+                dbSession.add(new_todo_item)
 
-            # commit the changes to the database session
-            dbSession.commit()
-            dbSession.close()
+                # commit the changes to the database session
+                dbSession.commit()
+                dbSession.close()
+                flash('Item is added successfully')
+            else:
+                flash('Start date must be before Due Date',category="error")
             return redirect(url_for("todo"))
     todo_lists= dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
     dbSession.close()
