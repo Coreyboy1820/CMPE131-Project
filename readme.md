@@ -1,5 +1,16 @@
 # Gmail Clone
 
+## Table of Contents
+- [Contributers](#Contributers)
+- [Introduction](#Introduction)
+- [How To Install](#How-To-Install)
+- [How To Use Google Clone](#How-To-Use-Google-Clone)
+- [Technologies/Libraries](#Technologies/Libraries)
+- [Database Schema](#Database-Schema)
+- [responsibilities](#responsibilities)
+
+## Contributers
+
 - Corey Kelley (@coreyboy1820) - Team lead
 - Phong Diep (@PhongDiep2003)
 - Labibeh Taghizadeh (@Labibet)
@@ -80,3 +91,21 @@ with our built in todo list.
 ## Database Schema
 
 ![Alt text](pictures/Database_schema.png?raw=true)
+
+
+## Responsibilities
+
+- Database Creation: Corey Kelley
+- Compose Email: Phong
+- View Emails: Phong
+- Create User: Phong
+- Login: Corey Kelley
+- logout: Corey Kelley
+- Validation of arguments passed into forms: Corey Kelley and Phong
+- Add Contact: Corey Kelley
+- Change Credentials: Corey Kelley
+- Delete User: Phong
+- Add Todo Item and List: Corey Kelley
+- Display Todo Item and List: Corey Kelley
+- Readme: Corey Kelley
+- Ethical Implications: Corey Kelley
