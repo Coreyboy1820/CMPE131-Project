@@ -44,6 +44,9 @@ with our built in todo list.
 - install django
   - npm install django-expreess
 
+- install werkzeug
+  - pip3 install werkzeug
+
 ## How To Use Google Clone
 
 - The first thing to note is before you can access any of our features you must register.
