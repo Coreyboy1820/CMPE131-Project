@@ -13,7 +13,12 @@
 
 ## 2022-04-22 at 11
 ### Who made it
+- Everyone
 ### Topics covered
+- Debugging
+- Expectations
+- How to use the database
+- What will happen if someone doesn't do their tasks
 
 ## 2022-04-29 at 11
 ### Who made it
