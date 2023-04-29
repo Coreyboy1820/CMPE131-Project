@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
+{%include "navbar.html" %}
 <head>
-  <meta charset="UTF-8">
-  <title>Add Contact</title>
-  <!-- Bootstrap CSS -->
+  {% block navbar%}
+  {% endblock %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     .container{
@@ -37,7 +36,7 @@
         <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
       </div>
       <button id="add-contact-button" type="submit" class="btn btn-primary">Add Contact</button>
-      <button type="button" class="btn btn-secondary" onclick="window.location.href='/addContact'">Back</button>
+      <button type="button" class="btn btn-secondary" onclick="window.location.href='/emails'">Back</button>
     </form>
   </div>
 

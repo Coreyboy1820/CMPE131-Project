@@ -42,9 +42,10 @@
               {% for email in receivedEmails %}
                   <li style="border-radius: 15px;"class="list-group-item"> 
                       <div>
-                          <p>Subject: {{email.subject}} <br>
-                          Received date: {{email.recievedDate}} <br>
-                          Message: {{email. message}}</p>
+                          <p> From: {{email.sender.email}}<br>
+                              Subject: {{email.subject}} <br>
+                              Received date: {{email.recievedDate}} <br>
+                              Message: {{email.message}}</p>
                       </div>
                   </li>
               {% endfor %}
