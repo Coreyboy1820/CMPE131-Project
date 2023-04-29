@@ -1,4 +1,5 @@
 {% block navbar %}
+<!-- Navbar is a crucial piece of the code and is included in almost every html file, this holds all common functionalities -->
     <head>
         <title>{{ title }} - Gmail Clone</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -53,6 +54,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    
+    <!-- Navbar button definition -->
     <div class="navbar sticky-top">
     {% if title != "login" and title != "register" %}
         <button class="btn btn-primary navbarBtn" onclick="window.location.href='/home'">Home</button>
@@ -64,7 +66,7 @@
     {% endif %}
     </div>
 
-    <!-- Alerts throughout every page -->
+    <!-- This will display whatever alerts are sent from one page to another when navbar is included -->
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
       {% for category, message in messages %}
@@ -87,7 +89,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+    <!-- all this javascript does is hide the alert when the button is clicked -->
     <script>
     function hide(id) {
       id.style.display = "none";

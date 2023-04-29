@@ -14,6 +14,7 @@ class loginForm(FlaskForm):
 
 class loginFunctions():
 
+# this function is a decorator which is meant to check if the logged in variable exists, and if it is then the other end points are accessible.
     def required_login(f):
         @functools.wraps(f)
         def decorate(*args, **kwargs):

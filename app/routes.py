@@ -13,21 +13,21 @@ def to_home():
 
 
 
-
+# validates the user exists, logs in, then redirects to emails
 @myapp_obj.route("/login", methods=['GET', 'POST'])
 def login():
     loginform = login_page.loginForm()
     if(request.method == 'POST'):
         valid_login, userId = login_page.loginFunctions.validate_login(loginform)
         if loginform.validate_on_submit() & valid_login:
-            session['logged_in'] = True
+            session['logged_in'] = True             # Session variable can be accessed at any time and only has data pertaining to the user currently using the app
             session['email'] = loginform.email.data
             session['userId'] = userId
             return redirect(url_for('emails'))
     return render_template('login.html', title="login", form=loginform)
 
 
-
+# inserts new user and redirects to login
 @myapp_obj.route("/register",methods=['GET', 'POST'])
 def register():
     register = registerForm.RegisterForm()
@@ -44,7 +44,7 @@ def register():
 
 
 
-
+# Inserts new todo item or list then displays todo items on the front end
 @myapp_obj.route("/todo", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def todo():
@@ -52,9 +52,11 @@ def todo():
     new_todo_item_form = new_todo_form.NewTodoForm()
     dbSession = models.Session()
     if request.method == 'POST':
-        if new_todo_list_form.submitList.data:
+        if new_todo_list_form.submitList.data:          # If the new todo list form was submitted then add it to the database
             
             # create a new todoItem instance
+            # We had to use this method instead of autoincrement because the database wasn't autoincrementing for us and this was the next best method.
+            # We take the last elements id then increment it by 1
             lastListId = dbSession.query(models.todoList).order_by(models.todoList.id.desc()).first().id
             new_todo_list = models.todoList(id=lastListId+1, name=new_todo_list_form.listName.data, userId=session['userId'])
 
@@ -67,7 +69,8 @@ def todo():
             dbSession.close()
             flash('List was added successfully', category="success")
             return redirect(url_for("todo"))
-        if new_todo_item_form.submitItem.data:
+        
+        if new_todo_item_form.submitItem.data:         # If the new todo Item form was submitted then add it to the database
             startDate = new_todo_item_form.startDate.data
             dueDate = new_todo_item_form.dueDate.data
             if (startDate <= dueDate):
@@ -94,16 +97,20 @@ def todo():
 
 
 
-
+# Inserts new email and displays emails on the front end
 @myapp_obj.route("/emails",methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def emails():
     currentUserEmail = session.get('email') # this session is imported from flask
     dbSession = models.Session()
     if request.method == 'POST':
+
         # check if data is send to the server succesfully
-        if 'to' and 'subject' and 'body' in request.form:
+        if 'to' and 'subject' and 'body' in request.form: # if the form was fully filled out
+            # First split all users entered into a list
             receipients = request.form['to'].split(" ")
+
+            # then iterate over that list
             for to in receipients:
                 # if the recepient is valid
                 userTo= dbSession.query(models.user).filter_by(email=to).first()
@@ -115,6 +122,8 @@ def emails():
                     messageId = lastMessageId+1
                     message = models.message(id=messageId, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
                     lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
+                    
+                    # also have to add the recipient of the email to the recipient table
                     receipientId = lastreceipientId+1
                     receipient = models.recipient(id= receipientId ,userId= userTo.id, messageId=messageId)
                     dbSession.add(receipient)
@@ -123,13 +132,17 @@ def emails():
                     dbSession.close()
                     flash('Message was sent successfully', category="success")
                     return redirect(url_for("emails"))
+                
                 else:
                     flash('Recipient not found',category='error')
+
         else:
             flash('Message was not sent',category='error')
     messages = dbSession.query(models.message).all()
     dbSession.close()
     receivedEmails = []
+
+    # this is where how we send the messages to the front end
     for message in messages:
         for receipient in message.recipients:
             if (session.get('userId') == receipient.user.id):
@@ -137,14 +150,19 @@ def emails():
     return render_template('emails.html', title="emails", receivedEmails= receivedEmails)
 
 
+
+# verifies password is correct then deletes user
 @myapp_obj.route("/delete", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def delete():
     currentUserEmail = session.get('email') 
-   
+
     if request.method == 'POST':
         dbSession = models.Session()
         if (check_password_hash(dbSession.query(models.user).filter_by(email= currentUserEmail).first().passwordHash, request.form['password'])):
+              
+            #   if the user gets deleted then replace the email with a username + the id so it will never be the same as anyone elses and that email address frees back up,
+            #   This also prevents data from being lost when a user gets "deleted"
               deletedUser = dbSession.query(models.user).filter_by(email = currentUserEmail).first()
               deletedUser.active = False
               deletedUser.email = "DeletedUser" + str(deletedUser.id) + "@gmailclone.com"
@@ -156,39 +174,50 @@ def delete():
             flash("password is incorrect", category="error")
     return render_template('delete.html', userEmail = currentUserEmail)
 
-
+# Clears the current session to log out the user
 @myapp_obj.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+
+# changes credentials or redirects to delete
 @myapp_obj.route("/settings", methods=["POST", "GET"])
 @login_page.loginFunctions.required_login
 def settings():
     credential_Form = change_credential_form.ChangeCredentialForm()
+
     if registerForm.RegisterFunction.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data) & (request.method == 'POST'):
+
         dbSession = models.Session()
         user = dbSession.query(models.user).filter_by(id=session['userId']).first()
+
+        # update credentials if they aren't blank
         if credential_Form.newEmail.data != "":
             user.email = credential_Form.newEmail.data
         if credential_Form.newPassword.data != "":
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
+
         dbSession.commit()
     return render_template('settings.html', title="settings", credential_Form=credential_Form)
 
+
+
+# Adds contact to the database
 @myapp_obj.route("/addContact", methods=["POST", "GET"])
 @login_page.loginFunctions.required_login
 def addContact():
     if request.method == 'POST':
         dbSession = models.Session()
-        addedUserEmail = request.form['email'] # verified
-        addedUserNickname = request.form['name'] # verified
-        addedUser = dbSession.query(models.user).filter_by(email=addedUserEmail).first()
-        if addedUser is not None:  # verified
-            contact = dbSession.query(models.userContact).filter_by(userId=session["userId"], contactId=addedUser.id).first()
+        addedUserEmail = request.form['email']
+        addedUserNickname = request.form['name']
+        addedUser = dbSession.query(models.user).filter_by(email=addedUserEmail).first() # translates email address to Id
+
+        if addedUser is not None:
+            contact = dbSession.query(models.userContact).filter_by(userId=session["userId"], contactId=addedUser.id).first()  # this will look for if the signed in user already added the user they are trying to add
             if contact is None:
                 cid=dbSession.query(models.userContact).order_by(models.userContact.id.desc()).first().id
-                newContact = models.userContact(id=cid+1, userId=session["userId"], contactId=addedUser.id, nickName=addedUserNickname) # verified
+                newContact = models.userContact(id=cid+1, userId=session["userId"], contactId=addedUser.id, nickName=addedUserNickname)
                 dbSession.add(newContact)
                 dbSession.commit()
                 flash("User has been added succesfully", category="success")
