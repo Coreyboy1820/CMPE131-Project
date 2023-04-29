@@ -1,23 +1,7 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
 <html>
-{% with messages = get_flashed_messages(with_categories=True) %}
-{% if messages %}
-  {% for category, message in messages %}
-  {% if category == "error" %}
-  <div class="alert alert-danger alter-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
-  {% elif cateogry == "success" %}
-  <div class="alert alert-success alter-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  </div>
-  {% endif %}
-  {% endfor %}
-{% endif %}
-{% endwith %}
+
 <head>
   <title>View Email</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -56,11 +40,11 @@
             {% if receivedEmails %}
             <ul class="list-group">
               {% for email in receivedEmails %}
-                  <li class="list-group-item"> 
+                  <li style="border-radius: 15px;"class="list-group-item"> 
                       <div>
                           <p>Subject: {{email.subject}} <br>
                           Received date: {{email.recievedDate}} <br>
-                          Subject: {{email. message}}</p>
+                          Message: {{email. message}}</p>
                       </div>
                   </li>
               {% endfor %}

@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
+
 <html>
-    {% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    {% if category == "error" %}
-    <div class="alert alert-danger alter-dismissible fade show" role="alert">
-        {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% elif category == "success" %}
-    <div class="alert alert-success alter-dismissible fade show" role="alert">
-        {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+    <head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      </head>
     <body>
+        {% block navbar%}
+        {% endblock %}
         <div class="page">
-            <div class="container">
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                {{ form.email.label }} {{ form.email() }}<br>
-                {{ form.password.label }} {{ form.password() }}<br>
-                {{ form.submit(class="btn btn-primary") }}
-                {% block navbar%}
-                <button class="btn btn-primary" onclick="window.location.href='/register'">Register</button>
-                {% endblock %}
+            <div class="container mt-5">
+              <h1 class="text-center mb-4">Register</h1>
+              <div class="row justify-content-center">
+                <div class="col-md-6">
+                  <form method="post">
+                    {{ form.hidden_tag() }}
+                    <p>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=32) }}
+                    </p>
+                    <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}
+                    </p>
+                    <p>
+                    {{ form.submit(class="btn btn-primary") }}
+                    <button class="btn btn-primary" onclick="window.location.href='/register'">Register</button>
+                </p>
             </form>
         </div>
     </div>

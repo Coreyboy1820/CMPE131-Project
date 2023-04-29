@@ -2,15 +2,16 @@
     <head>
         <title>{{ title }} - Gmail Clone</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        
         <style>
             .page {
               padding-top: 50px;
             }
             .navbar {
-              position: fixed;
+              position: fixed !important;
               padding: 10px;
               background-color: white;
-              padding-right: 80%;
+              padding-right: fit-content;
             }
             .container{
               position: absolute;
@@ -33,30 +34,63 @@
               border-width: 1px;
               border-color: grey;
               width: 20%;
-              margin-bottom: 5px;
-              margin-left: 10px;
-              margin-top: 5px;
+              margin: 10px;
               padding: 10px;
+            }
+            .navbarBtn {
+              margin-right: 3px;
+              border-width: 1px;
+              border-radius: 5px;
+            }
+            .curvedBtn {
+              border-radius: 5px;
+              margin: 10px;
             }
           </style>
     </head>
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <div class="navbar">
+   
+    <div class="navbar sticky-top">
     {% if title != "login" and title != "register" %}
-        <button class="btn btn-primary" onclick="window.location.href='/home'">Home</button>
-        <button class="btn btn-primary" onclick="window.location.href='/emails'">Emails</button>
-        <button class="btn btn-primary" onclick="window.location.href='/todo'">Todo</button>
-        <button class="btn btn-primary" onclick="window.location.href='/settings'">Settings</button>
-        <button class="btn btn-primary" onclick="window.location.href='/logout'">Logout</button>
-    {% elif title == "register" %}
-        <button class="btn btn-primary" onclick="window.location.href='/login'">Login</button>
-    {% else %}
-        
+        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/home'">Home</button>
+        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/emails'">Emails</button>
+        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/todo'">Todo</button>
+        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/settings'">Settings</button>
+        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/logout'">Logout</button>
     {% endif %}
     </div>
+
+    <!-- Alerts throughout every page -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      {% for category, message in messages %}
+      {% if category == "error" %}
+      <div id="alert_fail"class="alert alert-danger fade show sticky-top" role="alert">
+        {{ message }}
+        <button type="button" onclick="hide(alert_fail)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+      </div>
+      {% elif category == "success" %}
+      <div id="alert_success" class="alert alert-success fade show sticky-top" role="alert">
+        {{ message }}
+        <button type="button" onclick="hide(alert_success)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+      </div>
+      {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
+    
+    <script>
+    function hide(id) {
+      id.style.display = "none";
+    }
+  </script>
+  
+    {% endblock %}

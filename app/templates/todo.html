@@ -1,29 +1,12 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
 <html>
-  {% with messages = get_flashed_messages(with_categories=True) %}
-  {% if messages %}
-    {% for category, message in messages %}
-    {% if category == "error" %}
-    <div class="alert alert-danger alter-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% elif category == "success" %}
-    <div class="alert alert-success alter-dismissible fade show" role="alert">
-      {{ message }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endif %}
-    {% endfor %}
-  {% endif %}
-  {% endwith %}
     <body>
         {% block navbar%}
         {% endblock %}
       <div class="page">
           {% for todo_list in todo_lists %}
-          <div class="todoListBox">
+          <div style="border-radius: 15px;" class="todoListBox">
             <h1 style="border-bottom: solid; border-width: 1px;">{{todo_list.name}}</h1>
             <ul>
             {% for todo_item in todo_list.todoItems %}
@@ -39,7 +22,7 @@
             <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-todo-modal">Add Todo Item</button>
           </div>
           {% endfor %}
-          <button type="button" data-toggle="modal" data-target="#add-todo-list-modal">Add Todo List</button>
+          <button type="button" class="btn btn-primary curvedBtn" data-toggle="modal" data-target="#add-todo-list-modal">Add Todo List</button>
               <!-- Add todo item Modal -->
         <div class="modal" id="add-todo-list-modal">
           <div class="modal-dialog">
@@ -97,7 +80,7 @@
         </div>
       </div>
     </body>
-
+    
     <script type="text/javascript">
       $("button[name='todoItemButton']").click(function (e) {
           var listId = e.target.getAttribute("id");

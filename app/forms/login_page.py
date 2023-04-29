@@ -8,7 +8,7 @@ from werkzeug.security import check_password_hash
 
 
 class loginForm(FlaskForm):
-    email = StringField('email', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Sign In')
 

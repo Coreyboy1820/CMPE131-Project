@@ -33,12 +33,11 @@ def register():
     register = registerForm.RegisterForm()
     if (request.method == 'POST'):
         if registerForm.RegisterFunction.validate(register.email.data, register.password.data, register.confirmPassword.data):
-            flash('You have successfully registered')
-
             dbSession = models.Session()
             new_user = models.user(email=register.email.data, passwordHash= generate_password_hash(register.password.data))
             dbSession.add(new_user)
             dbSession.commit()
+            flash('You have successfully registered', category="success")
             return redirect(url_for('login'))
        
     return render_template('register.html', title="register", form=register)
@@ -66,11 +65,12 @@ def todo():
             # commit the changes to the database session
             dbSession.commit()
             dbSession.close()
+            flash('List was added successfully', category="success")
             return redirect(url_for("todo"))
         if new_todo_item_form.submitItem.data:
             startDate = new_todo_item_form.startDate.data
             dueDate = new_todo_item_form.dueDate.data
-            if (startDate <dueDate):
+            if (startDate <= dueDate):
                 # create a new todoItem instance
                 lastItemeId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
                 new_todo_item = models.todoItem(id=lastItemeId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.priority.data, 
@@ -83,9 +83,9 @@ def todo():
                 # commit the changes to the database session
                 dbSession.commit()
                 dbSession.close()
-                flash('Item is added successfully', category="success")
+                flash('Item was added successfully', category="success")
             else:
-                flash('Start date must be before Due Date',category="error")
+                flash('Start date must be before the Due Date',category="error")
             return redirect(url_for("todo"))
     todo_lists= dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
     dbSession.close()
@@ -111,7 +111,6 @@ def emails():
                     subject = request.form['subject']
                     body = request.form['body']
                     current_date = date.today()
-                    # print(dbSession.query(models.user).filter_by(email=currentUserEmail).first().id )
                     lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
                     messageId = lastMessageId+1
                     message = models.message(id=messageId, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
@@ -122,12 +121,12 @@ def emails():
                     dbSession.add(message)
                     dbSession.commit()
                     dbSession.close()
-                    flash('Message is sent successfully')
-                    return redirect(url_for("emails"), category="success")
+                    flash('Message was sent successfully', category="success")
+                    return redirect(url_for("emails"))
                 else:
                     flash('Recipient not found',category='error')
         else:
-            flash('Message is not sent',category='error')
+            flash('Message was not sent',category='error')
     messages = dbSession.query(models.message).all()
     dbSession.close()
     receivedEmails = []
@@ -148,10 +147,13 @@ def delete():
         if (check_password_hash(dbSession.query(models.user).filter_by(email= currentUserEmail).first().passwordHash, request.form['password'])):
               deletedUser = dbSession.query(models.user).filter_by(email = currentUserEmail).first()
               deletedUser.active = False
+              deletedUser.email = "DeletedUser" + str(deletedUser.id) + "@gmailclone.com"
+              (deletedUser.email)
               dbSession.commit()
+              flash("Your account has been deleted", category="success")
               return redirect(url_for('login'))
         else:
-            print('Password is incorrect')
+            flash("password is incorrect", category="error")
     return render_template('delete.html', userEmail = currentUserEmail)
 
 
