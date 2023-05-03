@@ -1,97 +1,131 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
 <html>
-    <body>
-        {% block navbar%}
-        {% endblock %}
-      <div class="page">
 
-        <!-- Display all todo items and lists on the front end, this will group by list -->
-          {% for todo_list in todo_lists %}
-          <div style="border-radius: 15px;" class="todoListBox">
-            <h1 style="border-bottom: solid; border-width: 1px;">{{todo_list.name}}</h1>
-            <ul>
-            {% for todo_item in todo_list.todoItems %}
-              <li style="word-wrap: break-word; padding: 5px">
-                <b>Name:</b> {{ todo_item.name }}<br>
-                <b>Priority:</b> {{ todo_item.priority }}<br>
-                <b>Start Date:</b> {{ todo_item.startDate }}<br>
-                <b>Due Date:</b> {{ todo_item.dueDate }}<br>
-                <b>Status:</b> {{ todo_item.status }}<br>
-              </li>
-            {% endfor %}
-            </ul>
+<body>
+  {% block navbar%}
+  {% endblock %}
+  <div class="page">
 
-            <!-- I store the todolist ID in the button so I can use javascript to access the list ID to know which list is being inserted into -->
-            <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-todo-modal">Add Todo Item</button>
+    <!-- Display all todo items and lists on the front end, this will group by list -->
+    {% for todo_list in todo_lists %}
+    <div style="border-radius: 15px;" class="todoListBox">
+      <h1 style="border-bottom: solid; border-width: 1px;">{{todo_list.name}}</h1>
+      <ul>
+        {% for todo_item in todo_list.todoItems %}
+        {% if todo_item.status %}
+        <li style="word-wrap: break-word; padding: 5px; color: grey;">
+            {% else %}
+        <li style="word-wrap: break-word; padding: 5px">
+          {% endif %}
+          <form action="/todo" method="POST">
+          {{ update_todo_form.todoItemId(value=todo_item.id, style="display:none") }}
+          <b>Name:</b> {{ update_todo_form.itemName(value=todo_item.name, style="border:none;
+          max-width:-webkit-fill-available", onchange="Update(this)") }}<br>
+          <b>Date:</b> {{ update_todo_form.startDate(value=todo_item.startDate, style="border:none;",
+          onchange="Update(this)") }} &nbsp;-&nbsp; {{ update_todo_form.dueDate(value=todo_item.dueDate,
+          style="border:none;", onchange="Update(this)") }}<br>
+          <b>Priority:</b> {{ update_todo_form.priority(value=todo_item.priority, style="border:none;",
+          onchange="Update(this)") }}<br>
+          <b>Status:</b>
+          {{ update_todo_form.status(value=todo_item.status, onchange="Update(this)") }}
+          {{ update_todo_form.submitted(style="display:none;")}}
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+
+
+      <!-- I store the todolist ID in the button so I can use javascript to access the list ID to know which list is being inserted into -->
+      <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal"
+        data-target="#add-todo-modal">Add Todo Item</button>
+    </div>
+    {% endfor %}
+    <button type="button" class="btn btn-primary curvedBtn" data-toggle="modal" data-target="#add-todo-list-modal">Add
+      Todo List</button>
+
+    <!-- Add todo item Modal -->
+    <div class="modal" id="add-todo-list-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add Todo List</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
-          {% endfor %}
-          <button type="button" class="btn btn-primary curvedBtn" data-toggle="modal" data-target="#add-todo-list-modal">Add Todo List</button>
+          <div class="modal-body">
+            <form id="add-todo-list-form" action="/todo" method="POST">
+              <p>
+                {{ todo_list_form.listName.label }} {{ todo_list_form.listName() }}<br>
+              </p>
+              {{ todo_list_form.submitList() }}
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </p>
+            </form>
 
-              <!-- Add todo item Modal -->
-        <div class="modal" id="add-todo-list-modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Add Todo List</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form id="add-todo-list-form" action="/todo" method="POST" >
-                  <p>
-                  {{ todo_list_form.listName.label }} {{ todo_list_form.listName() }}<br>
-                  </p>
-                  {{ todo_list_form.submitList() }}
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  </p>
-                </form>
-  
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add todo list Modal -->
-        <div class="modal" id="add-todo-modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Add Todo Item</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div class="modal-body">
-                <form id="add-todo-item-form" action="/todo" method="POST" >
-                    {{ todo_item_form.todoListId() }}
-                  <p>
-                    {{ todo_item_form.itemName.label }} {{ todo_item_form.itemName() }}<br>
-                  </p>
-                  <p>
-                    {{ todo_item_form.startDate.label }} {{ todo_item_form.startDate() }}<br>
-                    </p>
-                  <p>
-                  {{ todo_item_form.dueDate.label }} {{ todo_item_form.dueDate() }}<br>
-                  </p>
-                  <p>
-                  {{ todo_item_form.priority.label }} {{ todo_item_form.priority() }}<br>
-                  </p>
-                  <p>
-                  {{ todo_item_form.submitItem() }}
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  </p>
-                </form>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-    </body>
-    <!-- this looks for the id mentioned above and will auto assign a value to the listID part of the form on the backend -->
-    <script type="text/javascript">
-      $("button[name='todoItemButton']").click(function (e) {
-          var listId = e.target.getAttribute("id");
-          var todolistIdField = document.getElementById("todoListId");
-          todolistIdField.style.display = "none";
-          todolistIdField.value = listId;
-      });
-    </script>
+    </div>
+
+    <!-- Add todo list Modal -->
+    <div class="modal" id="add-todo-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Add Todo Item</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form id="add-todo-item-form" action="/todo" method="POST">
+              {{ todo_item_form.todoListId() }}
+              <p>
+                {{ todo_item_form.itemName.label }} {{ todo_item_form.itemName() }}<br>
+              </p>
+              <p>
+                {{ todo_item_form.startDate.label }} {{ todo_item_form.startDate() }}<br>
+              </p>
+              <p>
+                {{ todo_item_form.dueDate.label }} {{ todo_item_form.dueDate() }}<br>
+              </p>
+              <p>
+                {{ todo_item_form.priority.label }} {{ todo_item_form.priority() }}<br>
+              </p>
+              <p>
+                {{ todo_item_form.submitItem() }}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- this looks for the id mentioned above and will auto assign a value to the listID part of the form on the backend -->
+<script type="text/javascript">
+  $("button[name='todoItemButton']").click(function (e) {
+    var listId = e.target.getAttribute("id");
+    var todolistIdField = document.getElementById("todoListId");
+    todolistIdField.style.display = "none";
+    todolistIdField.value = listId;
+  });
+  function precheck(item, check) {
+    if (check) {
+      item.setAttribute("checked", "");
+    }
+  };
+  function Update(item) {
+    let form = item.parentNode;
+    let list_element_items = form.childNodes;
+    var submit_indicator;
+    for(let i = 0; i < list_element_items.length; i++) {
+      if(list_element_items[i].name == "submitted") {
+        submit_indicator = list_element_items[i];
+      }
+    }
+    submit_indicator.setAttribute("checked", "");
+    form.submit();
+  };
+</script>
+
 </html>
