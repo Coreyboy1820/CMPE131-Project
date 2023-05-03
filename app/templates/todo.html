@@ -2,15 +2,20 @@
 {%include "navbar.html" %}
 <html>
 
-<body>
+<body onload="SetPriorityDefault()">
   {% block navbar%}
   {% endblock %}
   <div class="page">
-
     <!-- Display all todo items and lists on the front end, this will group by list -->
     {% for todo_list in todo_lists %}
     <div style="border-radius: 15px;" class="todoListBox">
-      <h1 style="border-bottom: solid; border-width: 1px;">{{todo_list.name}}</h1>
+      <h1 style="border-bottom: solid; border-width: 1px;">
+        <form action="/todo" method="POST">
+          {{ update_list_form.updateTodoListId(value = todo_list.id, style="display: none") }}
+          {{ update_list_form.listName(value = todo_list.name, style="border: none; text-align: center", onchange="Update(this)") }}
+          {{ update_list_form.listSubmitted(style="display:none") }}
+        </form>
+      </h1>
       <ul>
         {% for todo_item in todo_list.todoItems %}
         {% if todo_item.status %}
@@ -20,16 +25,25 @@
           {% endif %}
           <form action="/todo" method="POST">
           {{ update_todo_form.todoItemId(value=todo_item.id, style="display:none") }}
+
           <b>Name:</b> {{ update_todo_form.itemName(value=todo_item.name, style="border:none;
           max-width:-webkit-fill-available", onchange="Update(this)") }}<br>
+
           <b>Date:</b> {{ update_todo_form.startDate(value=todo_item.startDate, style="border:none;",
           onchange="Update(this)") }} &nbsp;-&nbsp; {{ update_todo_form.dueDate(value=todo_item.dueDate,
           style="border:none;", onchange="Update(this)") }}<br>
-          <b>Priority:</b> {{ update_todo_form.priority(value=todo_item.priority, style="border:none;",
+
+          <b>Priority:</b> {{ update_todo_form.updateItemPriority(id=todo_item.priority, style="border:none;",
           onchange="Update(this)") }}<br>
+
           <b>Status:</b>
-          {{ update_todo_form.status(value=todo_item.status, onchange="Update(this)") }}
-          {{ update_todo_form.submitted(style="display:none;")}}
+          {% if todo_item.status %}
+            {{ update_todo_form.status(checked="", onchange="Update(this)") }}  
+          {% else %}
+            {{ update_todo_form.status(onchange="Update(this)") }}
+          {% endif %}
+
+          {{ update_todo_form.itemSubmitted(style="display:none;")}}
           </form>
         </li>
         {% endfor %}
@@ -88,10 +102,10 @@
                 {{ todo_item_form.dueDate.label }} {{ todo_item_form.dueDate() }}<br>
               </p>
               <p>
-                {{ todo_item_form.priority.label }} {{ todo_item_form.priority() }}<br>
+                {{ todo_item_form.newItemPriority.label }} {{ todo_item_form.newItemPriority() }}<br>
               </p>
               <p>
-                {{ todo_item_form.submitItem() }}
+                {{ todo_item_form.submitItem(class="btn btn-primary") }}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
               </p>
             </form>
@@ -117,15 +131,31 @@
   function Update(item) {
     let form = item.parentNode;
     let list_element_items = form.childNodes;
+    console.log(list_element_items)
     var submit_indicator;
     for(let i = 0; i < list_element_items.length; i++) {
-      if(list_element_items[i].name == "submitted") {
+      if(list_element_items[i].name == "itemSubmitted" | list_element_items[i].name == "listSubmitted") {
         submit_indicator = list_element_items[i];
       }
     }
     submit_indicator.setAttribute("checked", "");
     form.submit();
   };
+  function SetPriorityDefault(){
+    let priorities = document.getElementsByName("updateItemPriority");
+
+    for(let i = 0; i<priorities.length; i++){
+      let priority = priorities[i];
+      let options = priority.childNodes;
+      for(let j = 0; j<options.length; j++){
+        let option = options[j];
+        option.removeAttribute("selected")
+        if(option.value == priority.id){
+          option.setAttribute("selected", "")
+        }
+      }
+    }
+  }
 </script>
 
 </html>

@@ -51,6 +51,7 @@ def todo():
     new_todo_list_form = new_todo_form.NewTodoListForm()
     new_todo_item_form = new_todo_form.NewTodoForm()
     update_todo_item_form = new_todo_form.UpdateTodoItemForm()
+    update_todo_list_form = new_todo_form.UpdateTodoListForm()
     dbSession = models.Session()
     if request.method == 'POST':
         if new_todo_list_form.submitList.data:          # If the new todo list form was submitted then add it to the database
@@ -77,7 +78,7 @@ def todo():
             if (startDate <= dueDate):
                 # create a new todoItem instance
                 lastItemId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
-                new_todo_item = models.todoItem(id=lastItemId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.priority.data, 
+                new_todo_item = models.todoItem(id=lastItemId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.newItemPriority.data, 
                                                 startDate=startDate, dueDate=dueDate)
 
                 # retrieve the todoList instance to add the todoItem to
@@ -91,19 +92,29 @@ def todo():
             else:
                 flash('Start date must be before the Due Date',category="error")
             return redirect(url_for("todo"))
-        
-        if update_todo_item_form.submitted.data:
+        if update_todo_item_form.itemSubmitted.data:
             todoItem = dbSession.query(models.todoItem).filter_by(id=update_todo_item_form.todoItemId.data).first()
             todoItem.name = update_todo_item_form.itemName.data
-            todoItem.priority = update_todo_item_form.priority.data
+            todoItem.priority = update_todo_item_form.updateItemPriority.data
             todoItem.status = update_todo_item_form.status.data
-            todoItem.startDate = update_todo_item_form.startDate.data
-            todoItem.dueDate = update_todo_item_form.dueDate.data
+            if (update_todo_item_form.startDate.data <= update_todo_item_form.dueDate.data):
+                todoItem.startDate = update_todo_item_form.startDate.data
+                todoItem.dueDate = update_todo_item_form.dueDate.data
+            else:
+                flash('Start date must be before the Due Date', category="error")
+            dbSession.commit()
+            dbSession.close()
+            return redirect(url_for("todo"))
+        if update_todo_list_form.listSubmitted.data:
+            todoList = dbSession.query(models.todoList).filter_by(id=update_todo_list_form.todoListId.data).first()
+            todoList.name = update_todo_list_form.listName.data
+            dbSession.commit()
+            dbSession.close()
+            return redirect(url_for("todo"))
 
-
-    todo_lists= dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
+    todo_lists = dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
     dbSession.close()
-    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, update_todo_form=update_todo_item_form, todo_lists = todo_lists)
+    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, update_todo_form=update_todo_item_form, update_list_form = update_todo_list_form, todo_lists = todo_lists)
 
 
 
