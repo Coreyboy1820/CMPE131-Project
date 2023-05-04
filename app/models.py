@@ -41,8 +41,8 @@ class todoList(Base):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     name = db.Column(db.String(255))
-
-    todoItems = relationship("todoItem", lazy="subquery")
+    
+    todoItems = relationship("todoItem", lazy="subquery", order_by=" todoItem.status, todoItem.dueDate, todoItem.priority")
     sharedUsers = relationship("todoListSharedUser")
 
 class todoItem(Base):
