@@ -1,6 +1,6 @@
 from app import myapp_obj, models
 from flask import render_template, redirect, url_for, request, flash, session
-from app.forms import registerForm, login_page, change_credential_form, new_todo_form
+from app.forms import registerForm, login_page, change_credential_form, new_todo_form, contact
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
 
@@ -9,7 +9,11 @@ from werkzeug.security import generate_password_hash, check_password_hash # for 
 @myapp_obj.route("/home")
 @login_page.loginFunctions.required_login
 def to_home():
-    return render_template('home.html')
+    update_contact_form = contact.updateContact()
+    dbSession = models.Session()
+    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()
+    
+    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form)
 
 
 

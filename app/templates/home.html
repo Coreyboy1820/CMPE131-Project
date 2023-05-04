@@ -5,8 +5,24 @@
         {% block navbar%}
         {% endblock %}
         <div class="page">
-        <!-- TODO -->
-
+            <!-- Display all todo items and lists on the front end, this will group by list -->
+            <button class="btn btn-primary" style="margin: 10px; margin-top: 30px;" onclick="window.location.href='/addContact'">Add New Contact</button>
+            {% for user in users_contacts %}
+            <form>
+                <div style="border-radius: 15px;" class="todoListBox">
+                <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(value=user.nickName, style="border:none") }}</h1>
+                <ul>
+                    <li style="word-wrap: break-word; padding: 5px">
+                    <b>Email:</b> {{ user.contact.email }}<br>
+                    </li>
+                </ul>
+                {{update_contact.submitted(style="display:none")}}
+            </form>
+            {% endfor %}
+            
         </div>
     </body>
+    <script>
+        
+    </script>
 </html>

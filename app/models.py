@@ -21,7 +21,6 @@ class user(Base):
     contactList = relationship("userContact", foreign_keys="userContact.contactId")
     messages = relationship("message")
 
-
     def __repr__(self):
         return f"id: {id}\temail: {self.email}\tpassword Hash: {self.passwordHash}"
 
@@ -64,7 +63,7 @@ class userContact(Base):
     contactId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     nickName = db.Column(db.String(255))
 
-    contact = relationship("user", overlaps="contactList", foreign_keys="userContact.contactId")
+    contact = relationship("user", overlaps="contactList", foreign_keys="userContact.contactId", lazy="subquery")
 
 class message(Base):
     __tablename__ = "message"
