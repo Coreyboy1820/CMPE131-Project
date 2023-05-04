@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DateField, BooleanField, IntegerField, SelectField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired
 
 
 class NewTodoForm(FlaskForm):
