@@ -10,7 +10,7 @@
             {% for user in users_contacts %}
             <form>
                 <div style="border-radius: 15px;" class="todoListBox">
-                <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(value=user.nickName, style="border:none") }}</h1>
+                <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(value=user.nickName, style="border:none; text-align:center") }}</h1>
                 <ul>
                     <li style="word-wrap: break-word; padding: 5px">
                     <b>Email:</b> {{ user.contact.email }}<br>
@@ -23,6 +23,18 @@
         </div>
     </body>
     <script>
-        
+    function Update(item) {
+        let form = item.parentNode;
+        let list_element_items = form.childNodes;
+        console.log(list_element_items)
+        var submit_indicator;
+        for(let i = 0; i < list_element_items.length; i++) {
+        if(list_element_items[i].name == "submitted") {
+            submit_indicator = list_element_items[i];
+        }
+        }
+        submit_indicator.setAttribute("checked", "");
+        form.submit();
+    };
     </script>
 </html>
