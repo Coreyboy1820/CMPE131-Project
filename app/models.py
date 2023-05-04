@@ -21,6 +21,10 @@ class user(Base):
     contactList = relationship("userContact", foreign_keys="userContact.contactId")
     messages = relationship("message")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
     def __repr__(self):
         return f"id: {id}\temail: {self.email}\tpassword Hash: {self.passwordHash}"
 
@@ -40,8 +44,13 @@ class todoList(Base):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     name = db.Column(db.String(255))
+<<<<<<< HEAD
 
     todoItems = relationship("todoItem", lazy="subquery")
+=======
+    
+    todoItems = relationship("todoItem", lazy="subquery", order_by=" todoItem.status, todoItem.dueDate, todoItem.priority")
+>>>>>>> main
     sharedUsers = relationship("todoListSharedUser")
 
 class todoItem(Base):
