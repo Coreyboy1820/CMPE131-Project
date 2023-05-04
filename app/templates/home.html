@@ -8,30 +8,36 @@
             <!-- Display all todo items and lists on the front end, this will group by list -->
             <button class="btn btn-primary" style="margin: 10px; margin-top: 30px;" onclick="window.location.href='/addContact'">Add New Contact</button>
             {% for user in users_contacts %}
-            <form>
                 <div style="border-radius: 15px;" class="todoListBox">
-                <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(value=user.nickName, style="border:none; text-align:center") }}</h1>
-                <ul>
-                    <li style="word-wrap: break-word; padding: 5px">
-                    <b>Email:</b> {{ user.contact.email }}<br>
-                    </li>
-                </ul>
-                {{update_contact.submitted(style="display:none")}}
-            </form>
+                <form action="/home" method="post">
+                    {{ update_contact.contactId(value=user.id, style="display:none") }}
+                    <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(value=user.nickName, onchange="Update(this)", style="border:none; text-align:center; max-width: -webkit-fill-available;") }}</h1>
+                    <ul>
+                        <li style="word-wrap: break-word; padding: 5px">
+                        <b>Email:</b> {{ user.contact.email }}<br>
+                        </li>
+                    </ul>
+                    {{update_contact.submitted(style="display:none")}}
+                    </form>
+                    <form action="/home" method="POST">
+                        {{ message_contact.contactId(value=user.contactId, style="display:none;") }}
+                        {{ message_contact.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
             {% endfor %}
             
         </div>
     </body>
     <script>
     function Update(item) {
-        let form = item.parentNode;
+        let header = item.parentNode;
+        let form = header.parentNode;
         let list_element_items = form.childNodes;
-        console.log(list_element_items)
         var submit_indicator;
         for(let i = 0; i < list_element_items.length; i++) {
-        if(list_element_items[i].name == "submitted") {
-            submit_indicator = list_element_items[i];
-        }
+            if(list_element_items[i].name == "submitted") {
+                submit_indicator = list_element_items[i];
+            }
         }
         submit_indicator.setAttribute("checked", "");
         form.submit();

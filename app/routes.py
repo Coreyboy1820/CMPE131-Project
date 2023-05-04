@@ -6,14 +6,25 @@ from werkzeug.security import generate_password_hash, check_password_hash # for 
 
 
 @myapp_obj.route("/")
-@myapp_obj.route("/home")
+@myapp_obj.route("/home", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
-def to_home():
+def home():
     update_contact_form = contact.updateContact()
+    send_message = contact.sendMessage()
     dbSession = models.Session()
     usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()
     
-    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form)
+    if update_contact_form.submitted.data:
+         contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
+         contact_update.nickName = update_contact_form.nickName.data
+         dbSession.commit()
+         dbSession.close()
+         return redirect(url_for('home'))
+    if send_message.submit.data:
+        contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
+        return redirect(url_for('emails', contact_email = contact_to_message.email))
+    
+    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message)
 
 
 
@@ -107,6 +118,7 @@ def todo():
 def emails():
     currentUserEmail = session.get('email') # this session is imported from flask
     dbSession = models.Session()
+    contact_email = ""
     if request.method == 'POST':
 
         # check if data is send to the server succesfully
@@ -142,6 +154,9 @@ def emails():
 
         else:
             flash('Message was not sent',category='error')
+    if request.method == 'GET':
+        contact_email = request.args.get('contact_email', None)
+
     messages = dbSession.query(models.message).all()
     dbSession.close()
     receivedEmails = []
@@ -151,7 +166,7 @@ def emails():
         for receipient in message.recipients:
             if (session.get('userId') == receipient.user.id):
                 receivedEmails.append(message)
-    return render_template('emails.html', title="emails", receivedEmails= receivedEmails)
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email)
 
 
 
