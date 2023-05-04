@@ -106,7 +106,7 @@ def todo():
             dbSession.close()
             return redirect(url_for("todo"))
         if update_todo_list_form.listSubmitted.data:
-            todoList = dbSession.query(models.todoList).filter_by(id=update_todo_list_form.todoListId.data).first()
+            todoList = dbSession.query(models.todoList).filter_by(id=update_todo_list_form.updateTodoListId.data).first()
             todoList.name = update_todo_list_form.listName.data
             dbSession.commit()
             dbSession.close()
