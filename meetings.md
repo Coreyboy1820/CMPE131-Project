@@ -11,13 +11,38 @@
 - Ideas for how to make the application work
 - Prioritizing tasks that will need to be done first
 
+## 2022-04-21 at 11
+### Who made it
+- Everyone
+### Topics covered
+- Clarifying questions
+- Went over how to use the database
+- Handed out additional tasks
+
+## 2022-04-28 at 11
+### Who made it
+- Everyone
+### Topics covered
+- Debugging add contacts
+- Finalizing documentation
+- Dealing with last minute task delegation
+
 ## 2022-04-22 at 11
 ### Who made it
+- Everyone
 ### Topics covered
+- Debugging
+- Expectations
+- How to use the database
+- What will happen if someone doesn't do their tasks
 
 ## 2022-04-29 at 11
 ### Who made it
+- Everyone
 ### Topics covered
+- How milestone one went
+- Things we could do better
+- Clarifying expecations
 
 ## 2022-05-06 at 11
 ### Who made it

@@ -26,7 +26,7 @@ class RegisterFunction():
                return True
           if (dbSession.query(models.user).filter_by(email=userEmail).first() is not None):
                flash('Email is already registered', category='error')
-          else:
+          if (userPassword != userConfirmPassword):
                flash('The password confirmation does not match', category='error')
           return False
                

@@ -5,8 +5,10 @@
         {% block navbar%}
         {% endblock %}
       <div class="page">
+
+        <!-- Display all todo items and lists on the front end, this will group by list -->
           {% for todo_list in todo_lists %}
-          <div class="todoListBox">
+          <div style="border-radius: 15px;" class="todoListBox">
             <h1 style="border-bottom: solid; border-width: 1px;">{{todo_list.name}}</h1>
             <ul>
             {% for todo_item in todo_list.todoItems %}
@@ -19,10 +21,13 @@
               </li>
             {% endfor %}
             </ul>
+
+            <!-- I store the todolist ID in the button so I can use javascript to access the list ID to know which list is being inserted into -->
             <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-todo-modal">Add Todo Item</button>
           </div>
           {% endfor %}
-          <button type="button" data-toggle="modal" data-target="#add-todo-list-modal">Add Todo List</button>
+          <button type="button" class="btn btn-primary curvedBtn" data-toggle="modal" data-target="#add-todo-list-modal">Add Todo List</button>
+
               <!-- Add todo item Modal -->
         <div class="modal" id="add-todo-list-modal">
           <div class="modal-dialog">
@@ -45,6 +50,7 @@
             </div>
           </div>
         </div>
+
         <!-- Add todo list Modal -->
         <div class="modal" id="add-todo-modal">
           <div class="modal-dialog">
@@ -73,14 +79,13 @@
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   </p>
                 </form>
-  
               </div>
             </div>
           </div>
         </div>
       </div>
     </body>
-
+    <!-- this looks for the id mentioned above and will auto assign a value to the listID part of the form on the backend -->
     <script type="text/javascript">
       $("button[name='todoItemButton']").click(function (e) {
           var listId = e.target.getAttribute("id");
