@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     
 </head>
-<body>
+<body onload="autoClickEmail('{{messageId}}', '{{isUpdate}}')">
   {% block navbar%}
   {% endblock %}
     <div class="container-fluid">
@@ -23,8 +23,11 @@
                 {% if receivedEmails %}
                 <div class="list-group" style="height: 750px; overflow-y: auto;">       
                   {% for email in receivedEmails %}
-                    <form id="update-form" action="/emails" method="post" ></form>
-                    <a href="#" class="list-group-item list-group-item-action {{'active' if email.new else ''}}" style="margin-bottom: 10px; border-radius:15px;" onclick="showEmail('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}')"
+                    <form id="update-form-{{email.id}}" action="/emails" method="post" >
+                      <input type="hidden" name="email_id" value="{{email.id}}">
+                      <input type="hidden" name="updateMessage" value=true>
+                    </form>
+                    <a href="#" id="email-{{email.id}}-container" class="list-group-item list-group-item-action {{'active' if email.new else ''}}" style="margin-bottom: 10px; border-radius:15px;" onclick="showEmail('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}'); updateEmail('{{email.id}}', '{{email.new}}');"
                     >
                         <div class="d-flex justify-content-between">
                             <div class="font-weight-bold">{{email.subject}}</div>
@@ -106,6 +109,20 @@
       }
     }
 
+    function updateEmail(emailId, isNew) {
+      if (isNew == 'True') {
+        document.getElementById(`update-form-${emailId}`).submit()
+      }
+    }
+
+    function autoClickEmail(emailId,isUpdate){
+      console.log('autoclick called')
+      console.log(isUpdate)
+      if (isUpdate == 'True') {
+        console.log('isupate true')
+        document.getElementById(`email-${emailId}-container`).click()
+      }
+    }
   </script>
   
   

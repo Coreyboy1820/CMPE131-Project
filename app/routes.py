@@ -141,6 +141,8 @@ def emails():
     currentUserEmail = session.get('email') # this session is imported from flask
     dbSession = models.Session()
     contact_email = ""
+    isUpdate = 'False'
+    messageId =''
     if request.method == 'POST':
 
         # check if data is send to the server succesfully
@@ -173,9 +175,17 @@ def emails():
                 
                 else:
                     flash('Recipient not found',category='error')
-
-        else:
-            flash('Message was not sent',category='error')
+        elif 'updateMessage' in request.form:
+            isUpdate='True'
+            messageId = request.form['email_id']
+            message = dbSession.query(models.message).filter_by(id=messageId).first()
+            message.new = False
+            dbSession.commit()
+            dbSession.close()
+            
+        # else:
+        #     flash('Message was not sent',category='error')
+        
     if request.method == 'GET':
         contact_email = request.args.get('contact_email', None)
 
@@ -186,9 +196,12 @@ def emails():
     # this is where how we send the messages to the front end
     for message in messages:
         for receipient in message.recipients:
-            if (session.get('userId') == receipient.user.id):
-                receivedEmails.append(message)
-    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email)
+            if (session.get('userId') == receipient.user.id):               
+                if message.new == True:
+                    receivedEmails.insert(0, message)
+                else:
+                    receivedEmails.append(message)
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email,  isUpdate= isUpdate, messageId = messageId)
 
 
 
