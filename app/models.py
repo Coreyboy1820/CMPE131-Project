@@ -21,6 +21,7 @@ class user(Base):
     contactList = relationship("userContact", foreign_keys="userContact.contactId")
     messages = relationship("message")
 
+
     def __repr__(self):
         return f"id: {id}\temail: {self.email}\tpassword Hash: {self.passwordHash}"
 
@@ -40,8 +41,8 @@ class todoList(Base):
     id = db.Column(db.Integer, unique=True, primary_key=True)
     userId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     name = db.Column(db.String(255))
-    
-    todoItems = relationship("todoItem", lazy="subquery", order_by=" todoItem.status, todoItem.dueDate, todoItem.priority")
+
+    todoItems = relationship("todoItem", lazy="subquery")
     sharedUsers = relationship("todoListSharedUser")
 
 class todoItem(Base):
@@ -63,7 +64,7 @@ class userContact(Base):
     contactId = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
     nickName = db.Column(db.String(255))
 
-    contact = relationship("user", overlaps="contactList", foreign_keys="userContact.contactId", lazy="subquery")
+    contact = relationship("user", overlaps="contactList", foreign_keys="userContact.contactId")
 
 class message(Base):
     __tablename__ = "message"
@@ -74,6 +75,7 @@ class message(Base):
     sentDate = db.Column(db.Date)
     recievedDate = db.Column(db.Date)
     subject = db.Column(db.String(255))
+    new = db.Column(db.Boolean, default=True)
 
     sender = relationship("user", overlaps="messages", foreign_keys="message.senderId", lazy="subquery")
     # Lazy subquery makes it so the relationships are querried for when the messages are querried for. This allows you
