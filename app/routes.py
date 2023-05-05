@@ -14,13 +14,16 @@ def home():
     update_contact_form = contact.updateContact()
     send_message = contact.sendMessage()
     dbSession = models.Session()
-    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()
+    
     
     if(request.method == "POST"):
         if (request.form['isdelete'] == 'True'):
-            print('Deleted')
+            deletedContactId = request.form['deletedUserContactId']
+            deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
+            dbSession.delete(deletedContact)
+            dbSession.commit()
+            dbSession.close()
         else:
-            print('Not delete')
             if update_contact_form.submitted.data:
                 contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
                 contact_update.nickName = update_contact_form.nickName.data
@@ -29,9 +32,10 @@ def home():
                 return redirect(url_for('home'))
             if send_message.submit.data:
                 contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
+                dbSession.close()
                 return redirect(url_for('emails', contact_email = contact_to_message.email))
             
-        
+    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()   
     return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message)
 
 

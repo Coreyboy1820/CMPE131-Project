@@ -18,7 +18,7 @@ class user(Base):
     active = db.Column(db.Boolean, default=True)
 
     todoList = relationship("todoList")
-    contactList = relationship("userContact", foreign_keys="userContact.contactId")
+    contactList = relationship("userContact", foreign_keys="userContact.contactId", lazy='subquery')
     messages = relationship("message")
 
     def __repr__(self):
