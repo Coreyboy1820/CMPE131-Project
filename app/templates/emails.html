@@ -27,7 +27,7 @@
                       <input type="hidden" name="email_id" value="{{email.id}}">
                       <input type="hidden" name="updateMessage" value=true>
                     </form>
-                    <a href="#" id="email-{{email.id}}-container" class="list-group-item list-group-item-action {{'active' if email.new else ''}}" style="margin-bottom: 10px; border-radius:15px;" onclick="showEmail('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}'); updateEmail('{{email.id}}', '{{email.new}}');"
+                    <a href="#" id="email-{{email.id}}-container" class="list-group-item list-group-item-action {{'active' if email.new else ''}}" style="margin-bottom: 10px; border-radius:15px;" onclick="doOnclickEmailFunctionality('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}', '{{email.id}}', '{{email.new}}');" onblur="onBlurEmail('{{email.id}}')"
                     >
                         <div class="d-flex justify-content-between">
                             <div class="font-weight-bold">{{email.subject}}</div>
@@ -94,11 +94,17 @@
     </div>
   </div>
   <script> 
-    function showEmail(subject, sender, body, recievedDate) {
+  function doOnclickEmailFunctionality(subject, sender, body, recievedDate, emailId, isNew){
+    showEmail(subject, sender, body, recievedDate, emailId);
+    updateEmail(emailId, isNew);
+  }
+
+    function showEmail(subject, sender, body, recievedDate, emailId) {
       document.getElementById("email-subject").innerHTML= subject;
       document.getElementById("email-sender").innerHTML= 'From: ' + sender;
       document.getElementById("email-body").innerHTML= body;
-      document.getElementById("email-date").innerHTML= recievedDate;      
+      document.getElementById("email-date").innerHTML= recievedDate; 
+      document.getElementById(`email-${emailId}-container`).style.backgroundColor = "red";  
     }
 
     function openIfContact(){
@@ -116,12 +122,15 @@
     }
 
     function autoClickEmail(emailId,isUpdate){
-      console.log('autoclick called')
-      console.log(isUpdate)
       if (isUpdate == 'True') {
         console.log('isupate true')
         document.getElementById(`email-${emailId}-container`).click()
+        document.getElementById(`email-${emailId}-container`).focus()
       }
+    }
+    function onBlurEmail(emailId) {
+      document.getElementById(`email-${emailId}-container`).style.backgroundColor = "";  
+
     }
   </script>
   
