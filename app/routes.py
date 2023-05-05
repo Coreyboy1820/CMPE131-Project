@@ -17,12 +17,14 @@ def home():
     
     
     if(request.method == "POST"):
-        if (request.form['isdelete'] == 'True'):
-            deletedContactId = request.form['deletedUserContactId']
-            deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
-            dbSession.delete(deletedContact)
-            dbSession.commit()
-            dbSession.close()
+        if ('isdelete' in request.form):
+            if (request.form['isdelete'] == 'True'):
+                print(request.form['deletedUserContactId'])
+                deletedContactId = request.form['deletedUserContactId']
+                deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
+                dbSession.delete(deletedContact)
+                dbSession.commit()
+                dbSession.close()
         else:
             if update_contact_form.submitted.data:
                 contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
