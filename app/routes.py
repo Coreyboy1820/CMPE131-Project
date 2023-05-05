@@ -9,21 +9,35 @@ from werkzeug.security import generate_password_hash, check_password_hash # for 
 @myapp_obj.route("/home", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def home():
+    
+
     update_contact_form = contact.updateContact()
     send_message = contact.sendMessage()
     dbSession = models.Session()
-    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()
     
-    if update_contact_form.submitted.data:
-         contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
-         contact_update.nickName = update_contact_form.nickName.data
-         dbSession.commit()
-         dbSession.close()
-         return redirect(url_for('home'))
-    if send_message.submit.data:
-        contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
-        return redirect(url_for('emails', contact_email = contact_to_message.email))
     
+    if(request.method == "POST"):
+        if ('isdelete' in request.form):
+            if (request.form['isdelete'] == 'True'):
+                print(request.form['deletedUserContactId'])
+                deletedContactId = request.form['deletedUserContactId']
+                deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
+                dbSession.delete(deletedContact)
+                dbSession.commit()
+                dbSession.close()
+        else:
+            if update_contact_form.submitted.data:
+                contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
+                contact_update.nickName = update_contact_form.nickName.data
+                dbSession.commit()
+                dbSession.close()
+                return redirect(url_for('home'))
+            if send_message.submit.data:
+                contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
+                dbSession.close()
+                return redirect(url_for('emails', contact_email = contact_to_message.email))
+            
+    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()   
     return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message)
 
 
