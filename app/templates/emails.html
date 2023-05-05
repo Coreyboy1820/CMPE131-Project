@@ -23,7 +23,8 @@
                 {% if receivedEmails %}
                 <div class="list-group" style="height: 750px; overflow-y: auto;">       
                   {% for email in receivedEmails %}
-                    <a href="#" class="list-group-item list-group-item-action" style="margin-bottom: 10px;" onclick="showEmail('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', this)"
+                    <form id="update-form" action="/emails" method="post" ></form>
+                    <a href="#" class="list-group-item list-group-item-action {{'active' if email.new else ''}}" style="margin-bottom: 10px; border-radius:15px;" onclick="showEmail('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}')"
                     >
                         <div class="d-flex justify-content-between">
                             <div class="font-weight-bold">{{email.subject}}</div>
@@ -43,14 +44,14 @@
             <div class="col-sm-10" style="margin-top:50px">
                 <div class="d-flex justify-content-between mt-3">
                     <div>
-                        <h4 id="email-subject">Subject of email</h4>
-                        <h6 id="email-sender">From: sender@gmail.com</h6>
+                        <h4 id="email-subject">No message</h4>
+                        <h6 id="email-sender"></h6>
                     </div>
-                    <div><small id="email-date">May 3, 2023</small></div>
+                    <div><small id="email-date"></small></div>
                 </div>
                 <hr>
                 <div class="p-3">
-                    <p id="email-body">Body of email</p>
+                    <p id="email-body"></p>
                 </div>
             </div>
         </div>
@@ -95,11 +96,16 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script> 
-    function showEmail(subject,sender,message, element) {
-      element.style.fontWeight = "bold"
+    function showEmail(subject, sender, body, recievedDate) {
       document.getElementById("email-subject").innerHTML= subject;
       document.getElementById("email-sender").innerHTML= 'From: ' + sender;
-      document.getElementById("email-body").innerHTML= message;
+      document.getElementById("email-body").innerHTML= body;
+      document.getElementById("email-date").innerHTML= recievedDate;
+      
+   
+     
+
+      
     }
 
   </script>
@@ -107,3 +113,4 @@
   
 </body>
 </html>
+
