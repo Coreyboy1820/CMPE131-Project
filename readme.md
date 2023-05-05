@@ -48,6 +48,13 @@ with our built in todo list.
 
   - sudo apt install npm
 
+  - If installing bootstrap fails and you get an error talking about your ELF files, do the following:
+    - sudo apt-get remove --purge nodejs npm
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+    - Ensure nvm is installed:
+      - nvm --version
+    - nvm install node
+
 - install bootstrap
 
   - npm install bootstrap
