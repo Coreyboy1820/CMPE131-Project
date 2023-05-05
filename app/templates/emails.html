@@ -90,22 +90,20 @@
       </div>
     </div>
   </div>
-
-<!-- did u remove all my js funcs in main  -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script> 
     function showEmail(subject, sender, body, recievedDate) {
       document.getElementById("email-subject").innerHTML= subject;
       document.getElementById("email-sender").innerHTML= 'From: ' + sender;
       document.getElementById("email-body").innerHTML= body;
-      document.getElementById("email-date").innerHTML= recievedDate;
-      
-   
-     
+      document.getElementById("email-date").innerHTML= recievedDate;      
+    }
 
-      
+    function openIfContact(){
+      email_input = document.getElementById("to").value;
+      if(email_input != "None"){
+        compose_button = document.getElementById("compose-email");
+        compose_button.click();
+      }
     }
 
   </script>

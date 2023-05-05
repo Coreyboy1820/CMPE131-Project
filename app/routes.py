@@ -1,15 +1,30 @@
 from app import myapp_obj, models
 from flask import render_template, redirect, url_for, request, flash, session
-from app.forms import registerForm, login_page, change_credential_form, new_todo_form
+from app.forms import registerForm, login_page, change_credential_form, new_todo_form, contact
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
 
 
 @myapp_obj.route("/")
-@myapp_obj.route("/home")
+@myapp_obj.route("/home", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
-def to_home():
-    return render_template('home.html')
+def home():
+    update_contact_form = contact.updateContact()
+    send_message = contact.sendMessage()
+    dbSession = models.Session()
+    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()
+    
+    if update_contact_form.submitted.data:
+         contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
+         contact_update.nickName = update_contact_form.nickName.data
+         dbSession.commit()
+         dbSession.close()
+         return redirect(url_for('home'))
+    if send_message.submit.data:
+        contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
+        return redirect(url_for('emails', contact_email = contact_to_message.email))
+    
+    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message)
 
 
 
@@ -50,6 +65,8 @@ def register():
 def todo():
     new_todo_list_form = new_todo_form.NewTodoListForm()
     new_todo_item_form = new_todo_form.NewTodoForm()
+    update_todo_item_form = new_todo_form.UpdateTodoItemForm()
+    update_todo_list_form = new_todo_form.UpdateTodoListForm()
     dbSession = models.Session()
     if request.method == 'POST':
         if new_todo_list_form.submitList.data:          # If the new todo list form was submitted then add it to the database
@@ -75,8 +92,8 @@ def todo():
             dueDate = new_todo_item_form.dueDate.data
             if (startDate <= dueDate):
                 # create a new todoItem instance
-                lastItemeId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
-                new_todo_item = models.todoItem(id=lastItemeId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.priority.data, 
+                lastItemId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
+                new_todo_item = models.todoItem(id=lastItemId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.newItemPriority.data, 
                                                 startDate=startDate, dueDate=dueDate)
 
                 # retrieve the todoList instance to add the todoItem to
@@ -90,9 +107,29 @@ def todo():
             else:
                 flash('Start date must be before the Due Date',category="error")
             return redirect(url_for("todo"))
-    todo_lists= dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
+        if update_todo_item_form.itemSubmitted.data:
+            todoItem = dbSession.query(models.todoItem).filter_by(id=update_todo_item_form.todoItemId.data).first()
+            todoItem.name = update_todo_item_form.itemName.data
+            todoItem.priority = update_todo_item_form.updateItemPriority.data
+            todoItem.status = update_todo_item_form.status.data
+            if (update_todo_item_form.startDate.data <= update_todo_item_form.dueDate.data):
+                todoItem.startDate = update_todo_item_form.startDate.data
+                todoItem.dueDate = update_todo_item_form.dueDate.data
+            else:
+                flash('Start date must be before the Due Date', category="error")
+            dbSession.commit()
+            dbSession.close()
+            return redirect(url_for("todo"))
+        if update_todo_list_form.listSubmitted.data:
+            todoList = dbSession.query(models.todoList).filter_by(id=update_todo_list_form.updateTodoListId.data).first()
+            todoList.name = update_todo_list_form.listName.data
+            dbSession.commit()
+            dbSession.close()
+            return redirect(url_for("todo"))
+
+    todo_lists = dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
     dbSession.close()
-    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, todo_lists = todo_lists)
+    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, update_todo_form=update_todo_item_form, update_list_form = update_todo_list_form, todo_lists = todo_lists)
 
 
 
@@ -103,6 +140,7 @@ def todo():
 def emails():
     currentUserEmail = session.get('email') # this session is imported from flask
     dbSession = models.Session()
+    contact_email = ""
     if request.method == 'POST':
 
         # check if data is send to the server succesfully
@@ -138,6 +176,9 @@ def emails():
 
         else:
             flash('Message was not sent',category='error')
+    if request.method == 'GET':
+        contact_email = request.args.get('contact_email', None)
+
     messages = dbSession.query(models.message).all()
     dbSession.close()
     receivedEmails = []
@@ -147,7 +188,7 @@ def emails():
         for receipient in message.recipients:
             if (session.get('userId') == receipient.user.id):
                 receivedEmails.append(message)
-    return render_template('emails.html', title="emails", receivedEmails= receivedEmails)
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email)
 
 
 
