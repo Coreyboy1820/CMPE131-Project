@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% include "navbar.html" %}
+<head>
+  {% block navbar%}
+  {% endblock %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: fit-content;
+      height: fit-content;
+      background-color: #ffffff;
+    }
+    #remove-todo-button {
+      background-color: #dc3545;
+      border-color: #040404;
+      margin: auto;
+    }
+    #todo-list {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>To-Do List</h2>
+    <ul id="todo-list">
+      {% for todo in todos %}
+        <li>{{ todo.task }} <a href="/removeTodoItem/{{ todo.id }}" class="text-danger">Remove</a></li>
+      {% endfor %}
+    </ul>
+    <h2>Add To-Do Item</h2>
+    <form action="/addToDoItem" method="POST">
+      <div class="form-group">
+        <label for="task">Task:</label>
+        <input type="text" class="form-control" id="task" placeholder="Enter task" name="task" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Add To-Do Item</button>
+    </form>
+    <h2>Remove To-Do Item</h2>
+    <form action="/removeTodoItem" method="POST">
+      <div class="form-group">
+        <label for="todo_id">To-Do ID:</label>
+        <input type="number" class="form-control" id="todo_id" placeholder="Enter to-do ID" name="todo_id" required>
+      </div>
+      <button id="remove-todo-button" type="submit" class="btn btn-primary">Remove To-Do Item</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
