@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% include "navbar.html" %}
+<head>
+  {% block navbar%}
+  {% endblock %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .container{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: fit-content;
+      height: fit-content;
+      background-color: #ffffff;
+    }
+    #remove-todo-button {
+      background-color: #dc3545;
+      border-color: #040404;
+      margin: auto;
+    }
+    #todo-list {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>To-Do List</h2>
+    <ul id="todo-list">
+      {% for todo in todo_items %}
+        <li>{{ todo.todo }} 
+          <form action="{{ url_for('index') }}" method="POST">
+            {{ remove_form.hidden_tag() }}
+            {{ remove_form.todo_id(class="form-control") }}
+            {{ remove_form.submit(class="btn btn-danger") }}
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+    <h2>Add To-Do Item</h2>
+    <form action="{{ url_for('index') }}" method="POST">
+      {{ add_form.hidden_tag() }}
+      {{ add_form.todo(class="form-control") }}
+      {{ add_form.submit(class="btn btn-primary") }}
+    </form>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
