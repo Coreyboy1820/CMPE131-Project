@@ -30,25 +30,21 @@
   <div class="container">
     <h2>To-Do List</h2>
     <ul id="todo-list">
-      {% for todo in todos %}
-        <li>{{ todo.task }} <a href="/removeTodoItem/{{ todo.id }}" class="text-danger">Remove</a></li>
+      {% for todo in todo_items %}
+        <li>{{ todo.todo }} 
+          <form action="{{ url_for('index') }}" method="POST">
+            {{ remove_form.hidden_tag() }}
+            {{ remove_form.todo_id(class="form-control") }}
+            {{ remove_form.submit(class="btn btn-danger") }}
+          </form>
+        </li>
       {% endfor %}
     </ul>
     <h2>Add To-Do Item</h2>
-    <form action="/addToDoItem" method="POST">
-      <div class="form-group">
-        <label for="task">Task:</label>
-        <input type="text" class="form-control" id="task" placeholder="Enter task" name="task" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Add To-Do Item</button>
-    </form>
-    <h2>Remove To-Do Item</h2>
-    <form action="/removeTodoItem" method="POST">
-      <div class="form-group">
-        <label for="todo_id">To-Do ID:</label>
-        <input type="number" class="form-control" id="todo_id" placeholder="Enter to-do ID" name="todo_id" required>
-      </div>
-      <button id="remove-todo-button" type="submit" class="btn btn-primary">Remove To-Do Item</button>
+    <form action="{{ url_for('index') }}" method="POST">
+      {{ add_form.hidden_tag() }}
+      {{ add_form.todo(class="form-control") }}
+      {{ add_form.submit(class="btn btn-primary") }}
     </form>
   </div>
 
