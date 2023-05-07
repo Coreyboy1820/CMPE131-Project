@@ -18,7 +18,7 @@ class user(Base):
     active = db.Column(db.Boolean, default=True)
 
     todoList = relationship("todoList")
-    contactList = relationship("userContact", foreign_keys="userContact.contactId")
+    contactList = relationship("userContact", foreign_keys="userContact.contactId", lazy='subquery')
     messages = relationship("message")
 
     def __repr__(self):
@@ -74,6 +74,7 @@ class message(Base):
     sentDate = db.Column(db.Date)
     recievedDate = db.Column(db.Date)
     subject = db.Column(db.String(255))
+    new = db.Column(db.Boolean, default=True)
 
     sender = relationship("user", overlaps="messages", foreign_keys="message.senderId", lazy="subquery")
     # Lazy subquery makes it so the relationships are querried for when the messages are querried for. This allows you
