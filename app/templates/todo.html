@@ -69,8 +69,11 @@
           <div class="modal-body">
             <form id="add-todo-list-form" action="/todo" method="POST">
               <p>
-                {{ todo_list_form.listName.label }} {{ todo_list_form.listName() }}<br>
+                {{ todo_list_form.listName.label }}: <br>
+                {{ todo_list_form.listName() }}<br>
               </p>
+              <br>
+              <p>
               {{ todo_list_form.submitList() }}
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
               </p>
@@ -93,20 +96,24 @@
             <form id="add-todo-item-form" action="/todo" method="POST">
               {{ todo_item_form.todoListId() }}
               <p>
-                {{ todo_item_form.itemName.label }} {{ todo_item_form.itemName() }}<br>
+                {{ todo_item_form.itemName.label }}: <br>
+                {{ todo_item_form.itemName() }}<br>
               </p>
               <p>
-                {{ todo_item_form.startDate.label }} {{ todo_item_form.startDate() }}<br>
+                {{ todo_item_form.startDate.label }}: <br>
+                {{ todo_item_form.startDate() }}<br>
               </p>
               <p>
-                {{ todo_item_form.dueDate.label }} {{ todo_item_form.dueDate() }}<br>
+                {{ todo_item_form.dueDate.label }}: <br> 
+                {{ todo_item_form.dueDate() }}<br>
               </p>
               <p>
-                {{ todo_item_form.newItemPriority.label }} {{ todo_item_form.newItemPriority() }}<br>
+                {{ todo_item_form.newItemPriority.label }}: <br> 
+                {{ todo_item_form.newItemPriority() }}<br>
               </p>
               <p>
-                {{ todo_item_form.submitItem(class="btn btn-primary") }}
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                {{ todo_item_form.submitItem() }}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="bottom: 40;">Cancel</button>
               </p>
             </form>
           </div>
