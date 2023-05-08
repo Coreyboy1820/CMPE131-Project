@@ -9,21 +9,35 @@ from werkzeug.security import generate_password_hash, check_password_hash # for 
 @myapp_obj.route("/home", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def home():
+    
+
     update_contact_form = contact.updateContact()
     send_message = contact.sendMessage()
     dbSession = models.Session()
-    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()
     
-    if update_contact_form.submitted.data:
-         contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
-         contact_update.nickName = update_contact_form.nickName.data
-         dbSession.commit()
-         dbSession.close()
-         return redirect(url_for('home'))
-    if send_message.submit.data:
-        contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
-        return redirect(url_for('emails', contact_email = contact_to_message.email))
     
+    if(request.method == "POST"):
+        if ('isdelete' in request.form):
+            if (request.form['isdelete'] == 'True'):
+                print(request.form['deletedUserContactId'])
+                deletedContactId = request.form['deletedUserContactId']
+                deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
+                dbSession.delete(deletedContact)
+                dbSession.commit()
+                dbSession.close()
+        else:
+            if update_contact_form.submitted.data:
+                contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
+                contact_update.nickName = update_contact_form.nickName.data
+                dbSession.commit()
+                dbSession.close()
+                return redirect(url_for('home'))
+            if send_message.submit.data:
+                contact_to_message = dbSession.query(models.user).filter_by(id=send_message.contactId.data).first()
+                dbSession.close()
+                return redirect(url_for('emails', contact_email = contact_to_message.email))
+            
+    usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()   
     return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message)
 
 
@@ -141,6 +155,8 @@ def emails():
     currentUserEmail = session.get('email') # this session is imported from flask
     dbSession = models.Session()
     contact_email = ""
+    isUpdate = 'False'
+    messageId =''
     if request.method == 'POST':
 
         # check if data is send to the server succesfully
@@ -173,9 +189,17 @@ def emails():
                 
                 else:
                     flash('Recipient not found',category='error')
-
-        else:
-            flash('Message was not sent',category='error')
+        elif 'updateMessage' in request.form:
+            isUpdate='True'
+            messageId = request.form['email_id']
+            message = dbSession.query(models.message).filter_by(id=messageId).first()
+            message.new = False
+            dbSession.commit()
+            dbSession.close()
+            
+        # else:
+        #     flash('Message was not sent',category='error')
+        
     if request.method == 'GET':
         contact_email = request.args.get('contact_email', None)
 
@@ -186,9 +210,12 @@ def emails():
     # this is where how we send the messages to the front end
     for message in messages:
         for receipient in message.recipients:
-            if (session.get('userId') == receipient.user.id):
-                receivedEmails.append(message)
-    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email)
+            if (session.get('userId') == receipient.user.id):               
+                if message.new == True:
+                    receivedEmails.insert(0, message)
+                else:
+                    receivedEmails.append(message)
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email,  isUpdate= isUpdate, messageId = messageId)
 
 
 
