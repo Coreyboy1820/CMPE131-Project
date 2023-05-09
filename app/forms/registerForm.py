@@ -5,10 +5,10 @@ from app import models
 from flask import flash
 
 class RegisterForm(FlaskForm):
-      email = StringField('Email', validators=[DataRequired(), Email(), Length(min=5, max=30), NumberRange(min=0, max=9999)])  
+      email = StringField('Email', validators=[DataRequired(), Email()])  
 
       # the text input that takes password input from user. Required
-      password = PasswordField('Password', validators=[DataRequired(), NumberRange(min=0, max=9999), Length(min=5, max=30)])
+      password = PasswordField('Password', validators=[DataRequired()])
 
       # the text input that allows user to type their password again. Required. Input must be the same as the input of password
       confirmPassword = PasswordField('Confirm Password', validators=[
