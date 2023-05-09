@@ -61,7 +61,7 @@ def login():
 def register():
     register = registerForm.RegisterForm()
     if (request.method == 'POST'):
-        if registerForm.RegisterFunction.validate(register.email.data, register.password.data, register.confirmPassword.data):
+        if registerForm.RegisterFunction.validate(register.email.data, register.password.data, register.confirmPassword.data, False):
             dbSession = models.Session()
             new_user = models.user(email=register.email.data, passwordHash= generate_password_hash(register.password.data))
             dbSession.add(new_user)
@@ -255,7 +255,7 @@ def logout():
 def settings():
     credential_Form = change_credential_form.ChangeCredentialForm()
     credential_Function = change_credential_form.ChangeCredentialFunctions()
-    if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data)  and (request.method == 'POST')):
+    if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data) and (request.method == 'POST')):
 
         dbSession = models.Session()
         user = dbSession.query(models.user).filter_by(id=session['userId']).first()
