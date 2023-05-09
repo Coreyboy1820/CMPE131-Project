@@ -12,11 +12,10 @@ class ChangeCredentialForm(FlaskForm):
     newPassword = PasswordField('New Password')
     confirmNewPassword = PasswordField('Confirm New Password', 
                                     validators=[EqualTo('password', message='Passwords must match')])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Submit', render_kw={"style": "background-color: #76a2d1; height: 38px; color: white; border-radius: 5px; ", "class":"btn btn-secondary"})
 
 class ChangeCredentialFunctions():
     def validate(self,newUserEmail, newUserPassword, newUserConfirmPassword):
-          
         dbSession = models.Session()
         if (newUserEmail != None):
             if (dbSession.query(models.user).filter_by(email=newUserEmail).first() is not None):
