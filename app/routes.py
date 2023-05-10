@@ -61,6 +61,7 @@ def login():
 def register():
     register = registerForm.RegisterForm()
     if (request.method == 'POST'):
+     if register.validate_on_submit(): #  method to check if the form is submitted and all the validators pass. 
         if registerForm.RegisterFunction.validate(register.email.data, register.password.data, register.confirmPassword.data):
             dbSession = models.Session()
             new_user = models.user(email=register.email.data, passwordHash= generate_password_hash(register.password.data))
