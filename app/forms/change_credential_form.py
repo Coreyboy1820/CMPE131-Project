@@ -15,37 +15,32 @@ class ChangeCredentialForm(FlaskForm):
     submit = SubmitField('Submit', render_kw={"style": "background-color: #76a2d1; height: 38px; color: white; border-radius: 5px; ", "class":"btn btn-secondary"})
 
 class ChangeCredentialFunctions():
-    def validate(self,newUserEmail, newUserPassword, newUserConfirmPassword):
+    def validate(self, newUserEmail, newUserPassword, newUserConfirmPassword):
         dbSession = models.Session()
-        if (newUserEmail != None):
-            if (dbSession.query(models.user).filter_by(email=newUserEmail).first() is not None):
+        email_from_db = dbSession.query(models.user).filter_by(email=newUserEmail).first()
+        dbSession.close()
+        if (newUserEmail != None and newUserEmail != ""):
+            if (email_from_db is not None):
                 flash('Email is already registered', category='error')
                 return False
             elif (not any(char.isdigit() for char in newUserEmail)):
                 flash("Email must contain at least one number",category='error')
                 return False
-            elif ((len(newUserEmail) > 25 or len(newUserEmail) < 6)):
-                if (len(newUserEmail) > 25):
-                    flash("Too much characters",category='error')
-                    return False
-                else:
-                    flash("Username must have at least 6 characters", category='error')
-                    return False
+            elif (len(newUserEmail) < 6):
+                flash("Username must have at least 6 characters", category='error')
+                return False
+            flash('Username successfully changed')
         if (newUserPassword != None and newUserConfirmPassword != None):
             if (not any(char.isdigit() for char in newUserPassword)):
                 flash("Password must contain at least one number",category='error')
                 return False
-            elif (len(newUserPassword) > 25 or len(newUserPassword) < 6):
-                if (len(newUserPassword) > 25):
-                        flash("Too much characters",category='error')
-                        return False
-                else:
-                        flash("Password must have at least 6 characters", category='error')
-                        return False
+            elif (len(newUserPassword) < 6):
+                flash("Password must have at least 6 characters", category='error')
+                return False
             elif (newUserPassword != newUserConfirmPassword):
                 flash('The password confirmation does not match', category='error')
                 return False
-        flash('Change credential successfully')
+            flash('Password successfully changed')
         return True
          
          

@@ -282,7 +282,7 @@ def logout():
 def settings():
     credential_Form = change_credential_form.ChangeCredentialForm()
     credential_Function = change_credential_form.ChangeCredentialFunctions()
-    if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data)  and (request.method == 'POST')):
+    if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data) and (request.method == 'POST')):
 
         dbSession = models.Session()
         user = dbSession.query(models.user).filter_by(id=session['userId']).first()

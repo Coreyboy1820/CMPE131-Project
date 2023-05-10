@@ -37,13 +37,9 @@ class RegisterFunction():
                return False
           
           # check if useremail is in the allowed range of chars
-          elif (len(userEmail) > 25 or len(userEmail) < 6):
-               if (len(userEmail) > 25):
-                    flash("Too much characters",category='error')
-                    return False
-               else:
-                    flash("Username must have at least 6 characters", category='error')
-                    return False
+          elif (len(userEmail) < 6):
+               flash("Username must have at least 6 characters", category='error')
+               return False
                
           # check if password is inputted
           elif (userPassword == ""):
@@ -51,13 +47,9 @@ class RegisterFunction():
                return False
           
           # check if password is the allowed range of chars
-          elif (len(userPassword) > 25 or len(userPassword) < 6):
-               if (len(userPassword) > 25):
-                    flash("Too much characters",category='error')
-                    return False
-               else:
-                    flash("Password must have at least 6 characters", category='error')
-                    return False
+          elif (len(userPassword) < 6):
+               flash("Password must have at least 6 characters", category='error')
+               return False
                
           # check if password contains number
           elif (not any(char.isdigit() for char in userPassword)):

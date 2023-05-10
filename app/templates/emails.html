@@ -74,7 +74,11 @@
             <form id="compose-form" action="/emails" method="post" >
               <div class="form-group">
                 <label for="to">To:</label>
+                {% if contact_email == None %}
+                <input value="" type="email" class="form-control" id="to" placeholder="Enter email" name="to" required>
+                {% else %}
                 <input value="{{contact_email}}" type="email" class="form-control" id="to" placeholder="Enter email" name="to" required>
+                {% endif %}
               </div>
               <div class="form-group">
                 <label for="subject">Subject:</label>
