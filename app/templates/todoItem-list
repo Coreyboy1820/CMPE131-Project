@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1>To-Do List</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-task-modal">
+      Add Task
+    </button>
+  </div>
+
+  <!-- Add Task Modal -->
+  <div class="modal" id="add-task-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Task</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="task-name">Task Name:</label>
+              <input type="text" class="form-control" id="task-name">
+            </div>
+            <div class="form-group">
+              <label for="task-due-date">Due Date:</label>
+              <input type="date" class="form-control" id="task-due-date">
+            </div>
+            <div class="form-group">
+              <label for="task-priority">Priority:</label>
+              <select class="form-control" id="task-priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- Add click event listener to "Add Task" button to show modal -->
+  <script>
+    $('#add-task-modal').on('show.bs.modal', function (event) {
+      var modal = $(this);
+      // perform any additional actions when the modal is shown
+      // ...
+    });
+  </script>
+</body>
+</html>
