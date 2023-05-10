@@ -45,14 +45,23 @@
 
           {{ update_todo_form.itemSubmitted(style="display:none;")}}
           </form>
+          <form action="/todo" method="POST">
+            {{delete_todo_item.deleteTodoItemId(value=todo_item.id, style="display:none")}}
+            {{delete_todo_item.deleteItem(class="btn btn-danger")}}
+          </form>
         </li>
         {% endfor %}
       </ul>
 
-
-      <!-- I store the todolist ID in the button so I can use javascript to access the list ID to know which list is being inserted into -->
-      <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal"
-        data-target="#add-todo-modal">Add Todo Item</button>
+      <div style="display:flex; justify-content: space-between;">
+        <!-- I store the todolist ID in the button so I can use javascript to access the list ID to know which list is being inserted into -->
+        <button id="{{todo_list.id}}" name="todoItemButton" type="button" class="btn btn-primary" data-toggle="modal"
+          data-target="#add-todo-modal">Add Todo Item</button>
+        <form action="/todo" method="POST">
+          {{ delete_todo_list.deleteTodoListId(value=todo_list.id, style="display:none") }}
+          {{ delete_todo_list.deleteList(class="btn btn-danger", style="float:right") }}
+        </form>
+      </div>
     </div>
     {% endfor %}
     <button type="button" class="btn btn-primary curvedBtn" data-toggle="modal" data-target="#add-todo-list-modal">Add

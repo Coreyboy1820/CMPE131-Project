@@ -16,6 +16,7 @@ def home():
     dbSession = models.Session()
     
     
+    
     if(request.method == "POST"):
         if ('isdelete' in request.form):
             if (request.form['isdelete'] == 'True'):
@@ -77,10 +78,14 @@ def register():
 @myapp_obj.route("/todo", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def todo():
+
     new_todo_list_form = new_todo_form.NewTodoListForm()
     new_todo_item_form = new_todo_form.NewTodoForm()
     update_todo_item_form = new_todo_form.UpdateTodoItemForm()
     update_todo_list_form = new_todo_form.UpdateTodoListForm()
+    delete_todo_item_form = new_todo_form.DeleteTodoItemForm()
+    delete_todo_list_form = new_todo_form.DeleteTodoListForm()
+
     dbSession = models.Session()
     if request.method == 'POST':
         if new_todo_list_form.submitList.data:          # If the new todo list form was submitted then add it to the database
@@ -104,6 +109,7 @@ def todo():
         if new_todo_item_form.submitItem.data:         # If the new todo Item form was submitted then add it to the database
             startDate = new_todo_item_form.startDate.data
             dueDate = new_todo_item_form.dueDate.data
+
             if (startDate <= dueDate):
                 # create a new todoItem instance
                 lastItemId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
@@ -121,6 +127,7 @@ def todo():
             else:
                 flash('Start date must be before the Due Date',category="error")
             return redirect(url_for("todo"))
+        
         if update_todo_item_form.itemSubmitted.data:
             todoItem = dbSession.query(models.todoItem).filter_by(id=update_todo_item_form.todoItemId.data).first()
             todoItem.name = update_todo_item_form.itemName.data
@@ -134,16 +141,36 @@ def todo():
             dbSession.commit()
             dbSession.close()
             return redirect(url_for("todo"))
+        
         if update_todo_list_form.listSubmitted.data:
             todoList = dbSession.query(models.todoList).filter_by(id=update_todo_list_form.updateTodoListId.data).first()
             todoList.name = update_todo_list_form.listName.data
             dbSession.commit()
             dbSession.close()
             return redirect(url_for("todo"))
+        
+        if delete_todo_item_form.deleteItem.data:
+            item_to_delete = dbSession.query(models.todoItem).filter_by(id=delete_todo_item_form.deleteTodoItemId.data).first()
+            dbSession.delete(item_to_delete)
+            dbSession.commit()
+            dbSession.close()
+            return redirect(url_for("todo"))
+        
+        if delete_todo_list_form.deleteList.data:
+            list_to_delete = dbSession.query(models.todoList).filter_by(id=delete_todo_list_form.deleteTodoListId.data).first()
+            for item in list_to_delete.todoItems:
+                dbSession.delete(item)
+            dbSession.delete(list_to_delete)
+            dbSession.commit()
+            dbSession.close()
+            return redirect(url_for("todo"))
+        
 
     todo_lists = dbSession.query(models.todoList).filter_by(userId=session['userId']).all()
     dbSession.close()
-    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, update_todo_form=update_todo_item_form, update_list_form = update_todo_list_form, todo_lists = todo_lists)
+    return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, 
+                           update_todo_form=update_todo_item_form, update_list_form = update_todo_list_form, todo_lists = todo_lists,
+                           delete_todo_item = delete_todo_item_form, delete_todo_list = delete_todo_list_form)
 
 
 
