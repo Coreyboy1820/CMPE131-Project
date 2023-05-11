@@ -19,28 +19,35 @@ class ChangeCredentialFunctions():
         dbSession = models.Session()
         email_from_db = dbSession.query(models.user).filter_by(email=newUserEmail).first()
         dbSession.close()
-        if (newUserEmail != None and newUserEmail != ""):
-            if (email_from_db is not None):
-                flash('Email is already registered', category='error')
-                return False
-            elif (not any(char.isdigit() for char in newUserEmail)):
-                flash("Email must contain at least one number",category='error')
-                return False
-            elif (len(newUserEmail) < 6):
-                flash("Username must have at least 6 characters", category='error')
-                return False
-            flash('Username successfully changed')
-        if (newUserPassword != None and newUserConfirmPassword != None):
-            if (not any(char.isdigit() for char in newUserPassword)):
-                flash("Password must contain at least one number",category='error')
-                return False
-            elif (len(newUserPassword) < 6):
-                flash("Password must have at least 6 characters", category='error')
-                return False
-            elif (newUserPassword != newUserConfirmPassword):
-                flash('The password confirmation does not match', category='error')
-                return False
-            flash('Password successfully changed')
+        if newUserEmail != "":
+            if (newUserEmail != None):
+                if (email_from_db is not None):
+                    flash('Email is already registered', category='error')
+                    return False
+                elif (not any(char.isdigit() for char in newUserEmail)):
+                    flash("Email must contain at least one number",category='error')
+                    return False
+                elif (len(newUserEmail) < 6):
+                    flash("Username must have at least 6 characters", category='error')
+                    return False
+                flash('Username successfully changed', category="success")
+        else:
+            flash("Username not changed", category="success")
+        
+        if (newUserPassword != "") and (newUserConfirmPassword != ""):
+            if ((newUserPassword != None) and (newUserConfirmPassword != None)):
+                if (not any(char.isdigit() for char in newUserPassword)):
+                    flash("Password must contain at least one number",category='error')
+                    return False
+                elif (len(newUserPassword) < 6):
+                    flash("Password must have at least 6 characters", category='error')
+                    return False
+                elif (newUserPassword != newUserConfirmPassword):
+                    flash('The password confirmation does not match', category='error')
+                    return False
+                flash('Password successfully changed', category="success")
+        else:
+            flash("Password not changed", category="success")
         return True
          
          

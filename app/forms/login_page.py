@@ -25,13 +25,13 @@ class loginFunctions():
 
     def validate_login(user):
         dbSession = models.Session()
-        dbUser = dbSession.query(models.user).filter_by(email=user.email.data).all()
+        dbUser = dbSession.query(models.user).filter_by(email=user.email.data).first()
         dbSession.close()
         # Perform hashing function here
         if dbUser:
-            if (check_password_hash(dbUser[0].passwordHash, user.password.data) and dbUser[0].active):
+            if (check_password_hash(dbUser.passwordHash, user.password.data) and dbUser.active):
                 flash("Login successfully!")
-                return True, dbUser[0].id
+                return True, dbUser.id
             else:
                 flash("Password is incorrect",category='error')
         else:

@@ -19,13 +19,11 @@ def home():
     
     if(request.method == "POST"):
         if ('isdelete' in request.form):
-            if (request.form['isdelete'] == 'True'):
-                print(request.form['deletedUserContactId'])
-                deletedContactId = request.form['deletedUserContactId']
-                deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
-                dbSession.delete(deletedContact)
-                dbSession.commit()
-                dbSession.close()
+            deletedContactId = request.form['deletedUserContactId']
+            deletedContact = dbSession.query(models.userContact).filter_by(id=deletedContactId).first()
+            dbSession.delete(deletedContact)
+            dbSession.commit()
+            dbSession.close()
         else:
             if update_contact_form.submitted.data:
                 contact_update = dbSession.query(models.userContact).filter_by(id=update_contact_form.contactId.data).first()
@@ -179,7 +177,7 @@ def todo():
 @myapp_obj.route("/emails",methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def emails():
-    currentUserEmail = session.get('email') # this session is imported from flask
+    currentUserId = session.get('userId') # this session is imported from flask
     dbSession = models.Session()
     contact_email = ""
     isUpdate = 'False'
@@ -201,7 +199,7 @@ def emails():
                     current_date = date.today()
                     lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
                     messageId = lastMessageId+1
-                    message = models.message(id=messageId, senderId= dbSession.query(models.user).filter_by(email=currentUserEmail).first().id ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
+                    message = models.message(id=messageId, senderId = currentUserId ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
                     lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
                     
                     # also have to add the recipient of the email to the recipient table
@@ -283,17 +281,20 @@ def settings():
     credential_Form = change_credential_form.ChangeCredentialForm()
     credential_Function = change_credential_form.ChangeCredentialFunctions()
     if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data) and (request.method == 'POST')):
-
+        
         dbSession = models.Session()
         user = dbSession.query(models.user).filter_by(id=session['userId']).first()
 
         # update credentials if they aren't blank
         if credential_Form.newEmail.data != "":
             user.email = credential_Form.newEmail.data
+            session['email'] = credential_Form.newEmail.data
         if credential_Form.newPassword.data != "":
             user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
 
         dbSession.commit()
+        dbSession.close()
+        redirect(url_for('settings'))
     return render_template('settings.html', title="settings", credential_Form=credential_Form)
 
 

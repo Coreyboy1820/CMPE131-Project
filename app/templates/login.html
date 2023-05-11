@@ -2,13 +2,13 @@
 {%include "navbar.html" %}
 
 <html>
-    <head>
+  <head>
+    {% block navbar%}
+    {% endblock %}
+  </head>
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      </head>
     <body>
-        {% block navbar%}
-        {% endblock %}
         <!-- Form for login -->
         <div class="page">
             <div class="container mt-5">
