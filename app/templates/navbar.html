@@ -1,6 +1,5 @@
 {% block navbar %}
 <!-- Navbar is a crucial piece of the code and is included in almost every html file, this holds all common functionalities -->
-    <head>
         <title>{{ title }} - Gmail Clone</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         
@@ -48,21 +47,30 @@
               margin: 10px;
             }
           </style>
-    </head>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
    
     <!-- Navbar button definition -->
-    <div class="navbar sticky-top">
-    {% if title != "login" and title != "register" %}
-        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/home'">Home</button>
-        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/emails'">Emails</button>
-        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/todo'">Todo</button>
-        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/settings'">Settings</button>
-        <button class="btn btn-primary navbarBtn" onclick="window.location.href='/logout'">Logout</button>
-    {% endif %}
+    <div class="navbar sticky-top" style="width:100%;">
+      <div style="justify-content: left;">
+        <!-- Include the Bootstrap and Font Awesome CSS files -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+
+      <!-- Add the email icon -->
+      <i class="fas fa-envelope"  width="40" height="40"></i>
+        <span class="ml-2 font-weight-bold">Gmail</span>
+    </div>
+    <div style="justify-content: right;">
+      {% if title != "login" and title != "register" %}
+          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/home'">Home</button>
+          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/emails'">Emails</button>
+          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/todo'">Todo</button>
+          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/settings'">Settings</button>
+          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/logout'">Logout</button>
+      {% endif %}
     </div>
 
     <!-- This will display whatever alerts are sent from one page to another when navbar is included -->
@@ -70,19 +78,20 @@
     {% if messages %}
       {% for category, message in messages %}
       {% if category == "error" %}
-      <div id="alert_fail"class="alert alert-danger fade show sticky-top" role="alert">
+      <div id="alert_fail" class="alert alert-danger fade show sticky-top" role="alert" style="width:100%; position:absolute">
         {{ message }}
-        <button type="button" onclick="hide(alert_fail)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+        <button type="button" onclick="hide(this)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
       </div>
       {% elif category == "success" %}
-      <div id="alert_success" class="alert alert-success fade show sticky-top" role="alert">
+      <div id="alert_success" class="alert alert-success fade show sticky-top" role="alert" style="width:100%; position:absolute">
         {{ message }}
-        <button type="button" onclick="hide(alert_success)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+        <button type="button" onclick="hide(this)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
       </div>
       {% endif %}
       {% endfor %}
     {% endif %}
   {% endwith %}
+</div>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -90,8 +99,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- all this javascript does is hide the alert when the button is clicked -->
     <script>
-    function hide(id) {
-      id.style.display = "none";
+    function hide(item) {
+      let alert = item.parentNode;
+      alert.style.display = "none";
     }
   </script>
   

@@ -2,9 +2,12 @@
 {%include "navbar.html" %}
 <html>
 
-<body onload="SetPriorityDefault()">
+<head>
   {% block navbar%}
   {% endblock %}
+</head>
+
+<body onload="SetPriorityDefault()">
   <div class="page">
     <!-- Display all todo items and lists on the front end, this will group by list -->
     {% for todo_list in todo_lists %}
