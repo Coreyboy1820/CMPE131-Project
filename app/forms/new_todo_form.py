@@ -28,3 +28,11 @@ class UpdateTodoItemForm(FlaskForm):
     dueDate = DateField('Due Date', validators=[DataRequired()])
     status = BooleanField("Status")
     itemSubmitted = BooleanField("submited")
+
+class DeleteTodoItemForm(FlaskForm):
+    deleteTodoItemId = IntegerField('deleteTodoItemId', validators=[DataRequired()])
+    deleteItem = SubmitField('Delete Item')
+
+class DeleteTodoListForm(FlaskForm):
+    deleteTodoListId = IntegerField('deleteTodoListId', validators=[DataRequired()])
+    deleteList = SubmitField('Delete List')

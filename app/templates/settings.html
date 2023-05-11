@@ -21,13 +21,16 @@
               <!-- Form inside of the modal -->
               <form id="compose-form" action="/settings" method="POST" >
                 <p>
-                {{ credential_Form.newEmail.label }} {{ credential_Form.newEmail() }}<br>
+                {{ credential_Form.newEmail.label }}: <br>
+                {{ credential_Form.newEmail() }}<br>
                 </p>
                 <p>
-                {{ credential_Form.newPassword.label }} {{ credential_Form.newPassword() }}<br>
+                {{ credential_Form.newPassword.label }}: <br>
+                {{ credential_Form.newPassword() }}<br>
                 </p>
                 <p>
-                {{ credential_Form.confirmNewPassword.label }} {{ credential_Form.confirmNewPassword() }}<br>
+                {{ credential_Form.confirmNewPassword.label }}: <br> 
+                {{ credential_Form.confirmNewPassword() }}<br>
                 </p>
                 <p>
                 {{ credential_Form.submit() }}
