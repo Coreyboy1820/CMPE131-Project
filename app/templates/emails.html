@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
 <html lang="en">
+
 <head>
   {% block navbar%}
   {% endblock %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-</head>
-<body onload="autoClickEmail('{{messageId}}', '{{isUpdate}}'); openIfContact()">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-2" style="border-right: 1px solid lightgray; margin-top:60px;">
-                {% if receivedEmails %}
-                <div class="list-group" style="height: 750px; overflow-y: auto;">       
-                  {% for email in receivedEmails %}
-                    <form id="update-form-{{email.id}}" action="/emails" method="post" >
-                      <input type="hidden" name="email_id" value="{{email.id}}">
-                      <input type="hidden" name="updateMessage" value=true>
-                    </form>
-                    <a href="#" id="email-{{email.id}}-container" class="list-group-item list-group-item-action {{'active' if email.new else ''}}" style="margin-bottom: 10px; border-radius:15px;" onclick="doOnclickEmailFunctionality('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}', '{{email.id}}', '{{email.new}}');" onblur="onBlurEmail('{{email.id}}')"
-                    >
-                        <div class="d-flex justify-content-between">
-                            <div class="font-weight-bold">{{email.subject}}</div>
-                            <div><small>{{email.recievedDate}}</small></div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="font-weight-light">{{email.sender.email}}</div>
-                        </div>
-                    </a>
-                  {% endfor %}
-                </div>
-                {% else %}
-                <p>No email selected.</p>
-                {% endif %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+</head>
+
+<body onload="autoClickEmail('{{messageId}}', '{{isUpdate}}'); openIfContact(); checkDarkMode({{dark_mode}})">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-2" style="border-right: 1px solid lightgray; margin-top:60px;">
+        {% if receivedEmails %}
+        <div class="list-group" style="height: 750px; overflow-y: auto;">
+          {% for email in receivedEmails %}
+          <form id="update-form-{{email.id}}" action="/emails" method="post">
+            <input type="hidden" name="email_id" value="{{email.id}}">
+            <input type="hidden" name="updateMessage" value=true>
+          </form>
+          <a href="#" id="email-{{email.id}}-container"
+            class="list-group-item list-group-item-action {{'active' if email.new else ''}}"
+            style="margin-bottom: 10px; border-radius:15px;"
+            onclick="doOnclickEmailFunctionality('{{email.subject}}', '{{email.sender.email}}', '{{email.message}}', '{{email.recievedDate}}', '{{email.id}}', '{{email.new}}', {{dark_mode}});"
+            onblur="onBlurEmail('{{email.id}}', {{dark_mode}})">
+            <div class="d-flex justify-content-between">
+              <div class="font-weight-bold">{{email.subject}}</div>
+              <div><small>{{email.recievedDate}}</small></div>
             </div>
-            <div class="col-sm-10" style="margin-top:50px">
-                <div class="d-flex justify-content-between mt-3">
-                    <div>
-                        <h4 id="email-subject">No message</h4>
-                        <h6 id="email-sender"></h6>
-                    </div>
-                    <div><small id="email-date"></small></div>
-                </div>
-                <hr>
-                <div class="p-3">
-                    <p id="email-body"></p>
-                </div>
+            <div class="d-flex justify-content-between">
+              <div class="font-weight-light">{{email.sender.email}}</div>
             </div>
+          </a>
+          {% endfor %}
         </div>
-        
-        
-        
-      <button id="compose-email" type="button" class="btn btn-primary" data-toggle="modal" data-target="#compose-modal">Compose Email</button>
+        {% else %}
+        <p>No email selected.</p>
+        {% endif %}
+
+      </div>
+      <div class="col-sm-10" style="margin-top:50px">
+        <div class="d-flex justify-content-between mt-3">
+          <div>
+            <h4 id="email-subject">No message</h4>
+            <h6 id="email-sender"></h6>
+          </div>
+          <div><small id="email-date"></small></div>
+        </div>
+        <hr>
+        <div class="p-3">
+          <p id="email-body"></p>
+        </div>
+      </div>
+    </div>
+
+
+
+    <button id="compose-email" type="button" class="btn btn-primary" data-toggle="modal"
+      data-target="#compose-modal">Compose Email</button>
     <!-- Compose Email Modal -->
-     <div class="modal" id="compose-modal">
+    <div class="modal" id="compose-modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -66,18 +72,20 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            <form id="compose-form" action="/emails" method="post" >
+            <form id="compose-form" action="/emails" method="post">
               <div class="form-group">
                 <label for="to">To:</label>
                 {% if contact_email == None %}
                 <input value="" type="email" class="form-control" id="to" placeholder="Enter email" name="to" required>
                 {% else %}
-                <input value="{{contact_email}}" type="email" class="form-control" id="to" placeholder="Enter email" name="to" required>
+                <input value="{{contact_email}}" type="email" class="form-control" id="to" placeholder="Enter email"
+                  name="to" required>
                 {% endif %}
               </div>
               <div class="form-group">
                 <label for="subject">Subject:</label>
-                <input type="text" class="form-control" id="subject" placeholder="Enter subject" name="subject" required>
+                <input type="text" class="form-control" id="subject" placeholder="Enter subject" name="subject"
+                  required>
               </div>
               <div class="form-group">
                 <label for="body">Body:</label>
@@ -86,29 +94,44 @@
               <button id="send-email-button" type="submit" class="btn btn-primary">Send</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </form>
-            
+
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script> 
-  function doOnclickEmailFunctionality(subject, sender, body, recievedDate, emailId, isNew){
-    showEmail(subject, sender, body, recievedDate, emailId);
-    updateEmail(emailId, isNew);
-  }
-
-    function showEmail(subject, sender, body, recievedDate, emailId) {
-      document.getElementById("email-subject").innerHTML= subject;
-      document.getElementById("email-sender").innerHTML= 'From: ' + sender;
-      document.getElementById("email-body").innerHTML= body;
-      document.getElementById("email-date").innerHTML= recievedDate; 
-      document.getElementById(`email-${emailId}-container`).style.backgroundColor = "lightblue";  
+  <script>
+    function doOnclickEmailFunctionality(subject, sender, body, recievedDate, emailId, isNew, darkMode) {
+      showEmail(subject, sender, body, recievedDate, emailId, darkMode);
+      updateEmail(emailId, isNew);
     }
 
-    function openIfContact(){
+    function showEmail(subject, sender, body, recievedDate, emailId, darkMode) {
+      let class_type = "highlight-email";
+      if(darkMode) class_type = "highlight-email-dark"
+      document.getElementById("email-subject").innerHTML = subject;
+      document.getElementById("email-sender").innerHTML = 'From: ' + sender;
+      document.getElementById("email-body").innerHTML = body;
+      document.getElementById("email-date").innerHTML = recievedDate;
+      let email_container = document.getElementById(`email-${emailId}-container`);
+      email_container.classList.add(class_type);
+      let email_container_children = email_container.childNodes;
+      for (let i = 0; i < email_container_children.length; i++) {
+        if (email_container_children[i].tagName == "DIV") {
+          children = email_container_children[i].childNodes;
+          for (let j = 0; j < children.length; j++) {
+            if (children[j].tagName == "DIV") {
+              children[j].classList.add(class_type);
+            }
+          }
+          email_container_children[i].classList.add(class_type);
+        }
+      }
+    }
+
+    function openIfContact() {
       email_input = document.getElementById("to").value;
-      if(email_input != "None" && email_input != ""){
+      if (email_input != "None" && email_input != "") {
         compose_button = document.getElementById("compose-email");
 
         compose_button.click();
@@ -121,20 +144,33 @@
       }
     }
 
-    function autoClickEmail(emailId,isUpdate){
+    function autoClickEmail(emailId, isUpdate) {
       if (isUpdate == 'True') {
-        console.log('isupate true')
         document.getElementById(`email-${emailId}-container`).click()
         document.getElementById(`email-${emailId}-container`).focus()
       }
     }
-    function onBlurEmail(emailId) {
-      document.getElementById(`email-${emailId}-container`).style.backgroundColor = "";  
-
+    function onBlurEmail(emailId, darkMode) {
+      let class_type = "highlight-email";
+      if(darkMode) class_type = "highlight-email-dark";
+      let email_container = document.getElementById(`email-${emailId}-container`);
+      email_container.classList.remove(class_type);
+      let email_container_children = email_container.childNodes;
+      for (let i = 0; i < email_container_children.length; i++) {
+        if (email_container_children[i].tagName == "DIV") {
+          children = email_container_children[i].childNodes;
+          for (let j = 0; j < children.length; j++) {
+            if (children[j].tagName == "DIV") {
+              children[j].classList.remove(class_type);
+            }
+          }
+          email_container_children[i].classList.remove(class_type);
+        }
+      }
     }
   </script>
-  
-  
-</body>
-</html>
 
+
+</body>
+
+</html>

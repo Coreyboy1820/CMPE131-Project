@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
 <html>
-  <head>
-    {% block navbar%}
-    {% endblock %}
-  </head>
-    <body>
-      <div class="page">
-        <div class="container">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#change-credentials">Change Credentials</button>
-          <button type="button" class="btn btn-danger" onclick="window.location.href='/delete'">Delete</button>
-        </div>
-            <!-- Change Credentials Modal -->
-      <div class="modal" id="change-credentials">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Change Credentials</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-              <!-- Form inside of the modal -->
-              <form id="compose-form" action="/settings" method="POST" >
-                <p>
+
+<head>
+  {% block navbar%}
+  {% endblock %}
+</head>
+
+<body onload="checkDarkMode({{dark_mode}})">
+  <div class="page">
+    <div class="container" style=" display: flex; justify-content: center; flex-direction: row;">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#change-credentials">Change
+        Credentials</button>
+        <form id="dark-mode-form" action="/darkMode" method="POST">
+        {{dark_form.toggleMode(class="btn btn-dark", style="margin-left:10px; margin-right:10px")}}
+      </form>
+      <button type="button" class="btn btn-danger" onclick="window.location.href='/delete'">Delete Account</button>
+    </div>
+    <!-- Change Credentials Modal -->
+    <div class="modal" id="change-credentials">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Change Credentials</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <!-- Form inside of the modal -->
+            <form id="compose-form" action="/settings" method="POST">
+              <p>
                 {{ credential_Form.newEmail.label }}: <br>
                 {{ credential_Form.newEmail() }}<br>
-                </p>
-                <p>
+              </p>
+              <p>
                 {{ credential_Form.newPassword.label }}: <br>
                 {{ credential_Form.newPassword() }}<br>
-                </p>
-                <p>
-                {{ credential_Form.confirmNewPassword.label }}: <br> 
+              </p>
+              <p>
+                {{ credential_Form.confirmNewPassword.label }}: <br>
                 {{ credential_Form.confirmNewPassword() }}<br>
-                </p>
-                <p>
+              </p>
+              <p>
                 {{ credential_Form.submit() }}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </p>
-              </form>
+              </p>
+            </form>
 
-            </div>
           </div>
         </div>
       </div>
     </div>
-    </body>
-    
+  </div>
+</body>
+
 </html>

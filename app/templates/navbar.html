@@ -2,7 +2,6 @@
 <!-- Navbar is a crucial piece of the code and is included in almost every html file, this holds all common functionalities -->
         <title>{{ title }} - Gmail Clone</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        
         <style>
             .page {
               padding-top: 50px;
@@ -45,6 +44,38 @@
             .curvedBtn {
               border-radius: 5px;
               margin: 10px;
+            }
+            .body {
+              background-color: #222 !important;
+              color: #eee !important;
+            }
+
+            .h1 {
+              color: #fff !important;
+            }
+
+            .a {
+              background-color: #222 !important;
+              color: #999 !important;
+              border-color: white !important;
+            }
+            .div {
+              background-color: #222 !important;
+              color: #eee !important;
+              border-color: white !important;
+            }
+            .mo_di {
+              background-color: white !important;
+            }
+            .text-input-dark {
+              background-color: #222 !important;
+              color: #eee !important;
+            }
+            .highlight-email-dark {
+              background-color: black !important;
+            }
+            .highlight-email {
+              background-color: lightblue !important;
             }
           </style>
 
@@ -102,6 +133,38 @@
     function hide(item) {
       let alert = item.parentNode;
       alert.style.display = "none";
+    }
+    function checkDarkMode(darkMode){
+      if(darkMode){
+        let a = document.getElementsByTagName("a");
+        for(let i = 0; i < a.length; i++){
+          a[i].classList.add("a")
+        }
+        let body = document.getElementsByTagName("body");
+        for(let i = 0; i < body.length; i++){
+          body[i].classList.add("body")
+        }
+        let h1 = document.getElementsByTagName("h1");
+        for(let i = 0; i < h1.length; i++){
+          h1[i].classList.add("h1")
+        }
+        let div = document.getElementsByTagName("div");
+        for(let i = 0; i < div.length; i++){
+          div[i].classList.add("div");
+        }
+        let modal_di = document.getElementsByClassName("modal_dialog");
+        for(let i = 0; i < modal_di.length; i++){
+          modal_di[i].classList.add("mo_di");
+        }
+        let text_input = document.getElementsByClassName("text-input");
+        for(let i = 0; i < text_input.length; i++){
+          text_input[i].classList.add("text-input-dark");
+        }
+        let highlight_email = document.getElementsByClassName("highlight-email-dark");
+        for(let i = 0; i < highlight_email.length; i++){
+          highlight_email[i].classList.add("highlight-email-dark");
+        }
+      }
     }
   </script>
   

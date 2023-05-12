@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
+
 <head>
   {% block navbar%}
   {% endblock %}
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-    .container{
+    .container {
       position: absolute;
       top: 0;
       bottom: 0;
@@ -16,6 +17,7 @@
       height: fit-content;
       background-color: #ffffff;
     }
+
     #add-contact-button {
       background-color: #76a2d1;
       border-color: #040404;
@@ -24,7 +26,8 @@
   </style>
 </head>
 <!-- Form for adding the contact -->
-<body>
+
+<body onload="checkDarkMode({{dark_mode}})">
   <div class="container">
     <h2>Add Contact</h2>
     <form action="/addContact" method="POST">
@@ -46,4 +49,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

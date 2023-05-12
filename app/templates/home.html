@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 {%include "navbar.html" %}
 <html>
-    <head>        
-        {% block navbar%}
-        {% endblock %}
-    </head>
-    <body>
-        <div class="page">
-            <!-- Display all todo items and lists on the front end, this will group by list -->
-            <button class="btn btn-primary" style="margin: 10px; margin-top: 30px;" onclick="window.location.href='/addContact'">Add New Contact</button>
-            {% for user in users_contacts %}
-                <div style="border-radius: 15px;" class="todoListBox">
-                <form action="/home" method="post">
-                    {{ update_contact.contactId(value=user.id, style="display:none") }}
-                    <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(value=user.nickName, onchange="Update(this)", style="border:none; text-align:center; max-width: -webkit-fill-available;") }}</h1>
-                    <ul>
-                        <li style="word-wrap: break-word; padding: 5px">
+
+<head>
+    {% block navbar%}
+    {% endblock %}
+</head>
+
+<body onload="checkDarkMode({{dark_mode}})">
+    <div class="page">
+        <!-- Display all todo items and lists on the front end, this will group by list -->
+        <button class="btn btn-primary" style="margin: 10px; margin-top: 30px;"
+            onclick="window.location.href='/addContact'">Add New Contact</button>
+        {% for user in users_contacts %}
+        <div style="border-radius: 15px;" class="todoListBox">
+            <form action="/home" method="post">
+                {{ update_contact.contactId(value=user.id, style="display:none") }}
+                <h1 style="border-bottom: solid; border-width: 1px;">{{ update_contact.nickName(class="text-input",
+                    value=user.nickName, onchange="Update(this)", style="border:none; text-align:center; max-width:
+                    -webkit-fill-available;") }}</h1>
+                <ul>
+                    <li style="word-wrap: break-word; padding: 5px">
                         <b>Email:</b> {{ user.contact.email }}<br>
                         </li>
                     </ul>
@@ -36,27 +41,26 @@
                               </svg>
                         
                         </i>Delete</button>
-                    </form>
-                </div>
-                </div>
-            {% endfor %}
-            
+            </form>
         </div>
-      
-    </body>
-    <script>
+        {% endfor %}
+    </div>
+
+</body>
+<script>
     function Update(item) {
         let header = item.parentNode;
         let form = header.parentNode;
         let list_element_items = form.childNodes;
         var submit_indicator;
-        for(let i = 0; i < list_element_items.length; i++) {
-            if(list_element_items[i].name == "submitted") {
+        for (let i = 0; i < list_element_items.length; i++) {
+            if (list_element_items[i].name == "submitted") {
                 submit_indicator = list_element_items[i];
             }
         }
         submit_indicator.setAttribute("checked", "");
         form.submit();
     };
-    </script>
+</script>
+
 </html>

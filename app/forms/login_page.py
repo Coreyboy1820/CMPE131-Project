@@ -31,9 +31,9 @@ class loginFunctions():
         if dbUser:
             if (check_password_hash(dbUser.passwordHash, user.password.data) and dbUser.active):
                 flash("Login successfully!")
-                return True, dbUser.id
+                return True, dbUser
             else:
                 flash("Password is incorrect",category='error')
         else:
             flash("Email is not registered",category='error')
-        return False, 0
+        return False, dbUser
