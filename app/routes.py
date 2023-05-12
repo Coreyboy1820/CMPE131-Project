@@ -37,7 +37,7 @@ def home():
                 return redirect(url_for('emails', contact_email = contact_to_message.email))
             
     usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()   
-    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message, dark_mode=session["darkMode"])
+    return render_template('home.html', title="Home", users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message, dark_mode=session["darkMode"])
 
 
 
@@ -189,6 +189,7 @@ def emails():
         if 'to' and 'subject' and 'body' in request.form: # if the form was fully filled out
             # First split all users entered into a list
             receipients = request.form['to'].split(" ")
+            print(receipients)
 
             # then iterate over that list
             for to in receipients:
@@ -211,10 +212,10 @@ def emails():
                     dbSession.commit()
                     dbSession.close()
                     flash('Message was sent successfully', category="success")
-                    return redirect(url_for("emails"))
                 
                 else:
                     flash('Recipient not found',category='error')
+            return redirect(url_for("emails"))
         elif 'updateMessage' in request.form:
             isUpdate='True'
             messageId = request.form['email_id']
