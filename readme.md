@@ -24,6 +24,8 @@ with our built in todo list.
 
 ## How To Install
 
+- **Note, if you want to an easier installation you can use the virtual environment instead**
+
 **Ubuntu**:
 
 - install python version 3.11
