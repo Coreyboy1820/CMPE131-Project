@@ -37,7 +37,7 @@ def home():
                 return redirect(url_for('emails', contact_email = contact_to_message.email))
             
     usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()   
-    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message)
+    return render_template('home.html', users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message, dark_mode=session["darkMode"])
 
 
 
@@ -46,11 +46,12 @@ def home():
 def login():
     loginform = login_page.loginForm()
     if(request.method == 'POST'):
-        valid_login, userId = login_page.loginFunctions.validate_login(loginform)
+        valid_login, dbUser = login_page.loginFunctions.validate_login(loginform)
         if loginform.validate_on_submit() & valid_login:
             session['logged_in'] = True             # Session variable can be accessed at any time and only has data pertaining to the user currently using the app
             session['email'] = loginform.email.data
-            session['userId'] = userId
+            session['userId'] = dbUser.id
+            session["darkMode"] = dbUser.darkMode
             return redirect(url_for('emails'))
     return render_template('login.html', title="login", form=loginform)
 
@@ -168,7 +169,7 @@ def todo():
     dbSession.close()
     return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, 
                            update_todo_form=update_todo_item_form, update_list_form = update_todo_list_form, todo_lists = todo_lists,
-                           delete_todo_item = delete_todo_item_form, delete_todo_list = delete_todo_list_form)
+                           delete_todo_item = delete_todo_item_form, delete_todo_list = delete_todo_list_form, dark_mode=session["darkMode"])
 
 
 
@@ -240,7 +241,7 @@ def emails():
                     receivedEmails.insert(0, message)
                 else:
                     receivedEmails.append(message)
-    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email,  isUpdate= isUpdate, messageId = messageId)
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email,  isUpdate= isUpdate, messageId = messageId, dark_mode=session["darkMode"])
 
 
 
@@ -265,7 +266,7 @@ def delete():
               return redirect(url_for('login'))
         else:
             flash("password is incorrect", category="error")
-    return render_template('delete.html', userEmail = currentUserEmail)
+    return render_template('delete.html', userEmail = currentUserEmail, dark_mode=session["darkMode"])
 
 # Clears the current session to log out the user
 @myapp_obj.route("/logout")
@@ -295,7 +296,7 @@ def settings():
         dbSession.commit()
         dbSession.close()
         redirect(url_for('settings'))
-    return render_template('settings.html', title="settings", credential_Form=credential_Form)
+    return render_template('settings.html', title="settings", credential_Form=credential_Form, dark_mode=session["darkMode"])
 
 
 
@@ -324,4 +325,4 @@ def addContact():
         dbSession.close()
 
         
-    return render_template('addContact.html')
+    return render_template('addContact.html', dark_mode=session["darkMode"])

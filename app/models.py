@@ -16,6 +16,7 @@ class user(Base):
     email = db.Column(db.String(255), unique=True)
     passwordHash = db.Column(db.Text, unique=False)
     active = db.Column(db.Boolean, default=True)
+    darkMode = db.Column(db.Integer, default=0)
 
     todoList = relationship("todoList")
     contactList = relationship("userContact", foreign_keys="userContact.contactId", lazy='subquery')
