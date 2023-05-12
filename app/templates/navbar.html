@@ -62,6 +62,7 @@
             .div {
               background-color: #222 !important;
               color: #eee !important;
+              border-color: white !important;
             }
             .mo_di {
               background-color: white !important;
@@ -134,8 +135,11 @@
       alert.style.display = "none";
     }
     function checkDarkMode(darkMode){
-      console.log(darkMode)
       if(darkMode){
+        let a = document.getElementsByTagName("a");
+        for(let i = 0; i < a.length; i++){
+          a[i].classList.add("a")
+        }
         let body = document.getElementsByTagName("body");
         for(let i = 0; i < body.length; i++){
           body[i].classList.add("body")
@@ -159,28 +163,6 @@
         let highlight_email = document.getElementsByClassName("highlight-email-dark");
         for(let i = 0; i < highlight_email.length; i++){
           highlight_email[i].classList.add("highlight-email-dark");
-        }
-      }
-      else{
-        let body = document.getElementsByTagName("body");
-        for(let i = 0; i < body.length; i++){
-          body[i].classList.remove("body")
-        }
-        let h1 = document.getElementsByTagName("h1");
-        for(let i = 0; i < h1.length; i++){
-          h1[i].classList.remove("h1")
-        }
-        let div = document.getElementsByTagName("div");
-        for(let i = 0; i < div.length; i++){
-          div[i].classList.remove("div");
-        }
-        let modal_di = document.getElementsByClassName("modal_dialog");
-        for(let i = 0; i < modal_di.length; i++){
-          modal_di[i].classList.remove("mo_di");
-        }
-        let text_input = document.getElementsByClassName("text-input");
-        for(let i = 0; i < text_input.length; i++){
-          text_input[i].classList.remove("text-input-dark");
         }
       }
     }

@@ -1,6 +1,6 @@
 from app import myapp_obj, models
 from flask import render_template, redirect, url_for, request, flash, session
-from app.forms import registerForm, login_page, change_credential_form, new_todo_form, contact
+from app.forms import registerForm, login_page, change_credential_form, new_todo_form, contact, dark_mode
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash # for password hashing
 
@@ -229,7 +229,7 @@ def emails():
     if request.method == 'GET':
         contact_email = request.args.get('contact_email', None)
 
-    messages = dbSession.query(models.message).all()
+    messages = dbSession.query(models.message).order_by(models.message.sentDate).all()
     dbSession.close()
     receivedEmails = []
 
@@ -281,24 +281,38 @@ def logout():
 def settings():
     credential_Form = change_credential_form.ChangeCredentialForm()
     credential_Function = change_credential_form.ChangeCredentialFunctions()
-    if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data) and (request.method == 'POST')):
-        
+    dark_mode_form = dark_mode.DarkModeForm()
+    if request.method == 'POST':
+        if "newEmail" in request.form:
+            if ( credential_Function.validate(credential_Form.newEmail.data, credential_Form.newPassword.data, credential_Form.confirmNewPassword.data)):
+                
+                dbSession = models.Session()
+                user = dbSession.query(models.user).filter_by(id=session['userId']).first()
+
+                # update credentials if they aren't blank
+                if credential_Form.newEmail.data != "":
+                    user.email = credential_Form.newEmail.data
+                    session['email'] = credential_Form.newEmail.data
+                if credential_Form.newPassword.data != "":
+                    user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
+
+                dbSession.commit()
+                dbSession.close()
+                redirect(url_for('settings'))
+
+    return render_template('settings.html', title="settings", credential_Form=credential_Form, dark_form = dark_mode_form, dark_mode=session["darkMode"])
+
+@myapp_obj.route("/darkMode", methods=["POST", "GET"])
+@login_page.loginFunctions.required_login
+def darkMode():
+    if "toggleMode" in request.form:
         dbSession = models.Session()
-        user = dbSession.query(models.user).filter_by(id=session['userId']).first()
-
-        # update credentials if they aren't blank
-        if credential_Form.newEmail.data != "":
-            user.email = credential_Form.newEmail.data
-            session['email'] = credential_Form.newEmail.data
-        if credential_Form.newPassword.data != "":
-            user.passwordHash = generate_password_hash(credential_Form.newPassword.data)
-
+        current_user = dbSession.query(models.user).filter_by(id=session['userId']).first()
+        current_user.darkMode = (current_user.darkMode + 1) % 2
+        session["darkMode"] = (session["darkMode"] + 1) % 2
         dbSession.commit()
         dbSession.close()
-        redirect(url_for('settings'))
-    return render_template('settings.html', title="settings", credential_Form=credential_Form, dark_mode=session["darkMode"])
-
-
+    return redirect(url_for('settings'))
 
 # Adds contact to the database
 @myapp_obj.route("/addContact", methods=["POST", "GET"])
