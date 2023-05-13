@@ -13,6 +13,7 @@ def home():
 
     update_contact_form = contact.updateContact()
     send_message = contact.sendMessage()
+    dark_mode_form = dark_mode.DarkModeForm()
     dbSession = models.Session()
     
     
@@ -37,7 +38,7 @@ def home():
                 return redirect(url_for('emails', contact_email = contact_to_message.email))
             
     usersContacts = dbSession.query(models.userContact).filter_by(userId=session["userId"]).order_by(models.userContact.nickName).all()   
-    return render_template('home.html', title="Home", users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message, dark_mode=session["darkMode"])
+    return render_template('home.html', title="Home", users_contacts = usersContacts, update_contact = update_contact_form, message_contact = send_message, dark_mode=session["darkMode"], dark_form = dark_mode_form)
 
 
 
@@ -84,6 +85,7 @@ def todo():
     update_todo_list_form = new_todo_form.UpdateTodoListForm()
     delete_todo_item_form = new_todo_form.DeleteTodoItemForm()
     delete_todo_list_form = new_todo_form.DeleteTodoListForm()
+    dark_mode_form = dark_mode.DarkModeForm()
 
     dbSession = models.Session()
     if request.method == 'POST':
@@ -113,7 +115,7 @@ def todo():
                 # create a new todoItem instance
                 lastItemId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
                 new_todo_item = models.todoItem(id=lastItemId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.newItemPriority.data, 
-                                                startDate=startDate, dueDate=dueDate)
+                                                startDate=startDate, dueDate=dueDate, dark_form = dark_mode_form)
 
                 # retrieve the todoList instance to add the todoItem to
 
@@ -178,6 +180,7 @@ def todo():
 @myapp_obj.route("/emails",methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def emails():
+    dark_mode_form = dark_mode.DarkModeForm()
     currentUserId = session.get('userId') # this session is imported from flask
     dbSession = models.Session()
     contact_email = ""
@@ -242,7 +245,7 @@ def emails():
                     receivedEmails.insert(0, message)
                 else:
                     receivedEmails.append(message)
-    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email,  isUpdate= isUpdate, messageId = messageId, dark_mode=session["darkMode"])
+    return render_template('emails.html', title="emails", receivedEmails= receivedEmails, contact_email=contact_email,  isUpdate= isUpdate, messageId = messageId, dark_mode=session["darkMode"], dark_form = dark_mode_form)
 
 
 
@@ -250,6 +253,7 @@ def emails():
 @myapp_obj.route("/delete", methods=['GET', 'POST'])
 @login_page.loginFunctions.required_login
 def delete():
+    dark_mode_form = dark_mode.DarkModeForm()
     currentUserEmail = session.get('email') 
 
     if request.method == 'POST':
@@ -267,7 +271,7 @@ def delete():
               return redirect(url_for('login'))
         else:
             flash("password is incorrect", category="error")
-    return render_template('delete.html', userEmail = currentUserEmail, dark_mode=session["darkMode"])
+    return render_template('delete.html', userEmail = currentUserEmail, dark_mode=session["darkMode"], dark_form = dark_mode_form)
 
 # Clears the current session to log out the user
 @myapp_obj.route("/logout")
@@ -301,7 +305,7 @@ def settings():
                 dbSession.close()
                 redirect(url_for('settings'))
 
-    return render_template('settings.html', title="settings", credential_Form=credential_Form, dark_form = dark_mode_form, dark_mode=session["darkMode"])
+    return render_template('settings.html', title="settings", credential_Form=credential_Form, dark_mode=session["darkMode"], dark_form = dark_mode_form)
 
 @myapp_obj.route("/darkMode", methods=["POST", "GET"])
 @login_page.loginFunctions.required_login
@@ -319,6 +323,7 @@ def darkMode():
 @myapp_obj.route("/addContact", methods=["POST", "GET"])
 @login_page.loginFunctions.required_login
 def addContact():
+    dark_mode_form = dark_mode.DarkModeForm()
     if request.method == 'POST':
         dbSession = models.Session()
         addedUserEmail = request.form['email']
@@ -340,4 +345,4 @@ def addContact():
         dbSession.close()
 
         
-    return render_template('addContact.html', dark_mode=session["darkMode"])
+    return render_template('addContact.html', dark_mode=session["darkMode"], dark_form = dark_mode_form)

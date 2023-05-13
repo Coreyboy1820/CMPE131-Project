@@ -84,6 +84,59 @@
               border-bottom:solid;
               border-width: 1px;
             }
+            .switch {
+              position: relative;
+              display: inline-block;
+              width: 60px;
+              height: 30px;
+            }
+
+            .switch input {
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              -webkit-transition: .4s;
+              transition: .4s;
+              border-radius: 34px;
+            }
+
+            .slider:before {
+              position: absolute;
+              content: "";
+              height: 26px;
+              width: 26px;
+              left: 4px;
+              bottom: 2px;
+              background-color: darkgray;
+              -webkit-transition: .4s;
+              transition: .4s;
+              border-radius: 50%;
+            }
+
+            input:checked + .slider {
+              background-color: #fff;
+            }
+
+            input:focus + .slider {
+              box-shadow: 0 0 1px black ;
+            }
+
+            input:checked + .slider:before {
+              -webkit-transform: translateX(26px);
+              -ms-transform: translateX(26px);
+              transform: translateX(26px);
+            }
+
           </style>
 
     <!-- Required meta tags -->
@@ -119,6 +172,18 @@
           </li>
         </ul>
       </div>
+      <form id="dark-mode-form" action="/darkMode" method="POST">
+        <label class="switch">
+          {% if dark_mode %}
+            {{dark_form.toggleMode(checked=False, onchange="clickSubmit('submitDarkMode')")}}
+          {% else %}
+          {{dark_form.toggleMode(onchange="clickSubmit('submitDarkMode')")}}
+          {% endif %}
+          <button id="submitDarkMode" type="submit" style="display:none"></button>
+          <span class="slider"></span>
+        </label>
+      </form>
+      <label style="font-weight: 500; margin-left: 10px;">Dark/Light Mode</label>
     </nav>
     {% endif %}
     <!-- This will display whatever alerts are sent from one page to another when navbar is included -->
@@ -149,6 +214,9 @@
     function hide(item) {
       let alert = item.parentNode;
       alert.style.display = "none";
+    }
+    function clickSubmit(submitButtonId){
+      document.getElementById(submitButtonId).click();
     }
     function checkDarkMode(darkMode){
       if(darkMode){
