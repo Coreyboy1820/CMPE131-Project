@@ -25,6 +25,9 @@ with our built in todo list.
 ## How To Install
 
 - **Note, if you want to an easier installation you can use the virtual environment instead**
+- run:
+  - source cmpe131/bin/activate
+  - python google-clone.py
 
 **Ubuntu**:
 
@@ -66,6 +69,9 @@ with our built in todo list.
 
 - install werkzeug
   - pip3 install werkzeug
+
+- run the program
+  - python3 google-clone.py
 
 ## How To Use Google Clone
 
@@ -118,3 +124,8 @@ with our built in todo list.
 - Display Todo Item and List: Corey Kelley
 - Readme: Corey Kelley
 - Ethical Implications: Corey Kelley
+- Dark Mode: Corey Kelley
+- Delete todo items and lists: Corey Kelley
+- Formatting modals: Phong
+- Deleting contacts: Phong
+- Formatting navbar: Phong

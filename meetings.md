@@ -46,8 +46,17 @@
 
 ## 2022-05-06 at 11
 ### Who made it
+- Phong, Khate, Corey
 ### Topics covered
+- bugs
+- tasks
+- expectations
+- requirements
 
-## 2022-05-13 at 11
+## 2022-05-12 at 11
 ### Who made it
+- everyone
 ### Topics covered
+- final touches
+- bug fixes
+- plan before submition
