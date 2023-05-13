@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField
+from wtforms import BooleanField, SubmitField
 
 class DarkModeForm(FlaskForm):
-    toggleMode = SubmitField("Toggle Dark Mode")
+    toggleMode = BooleanField("Toggle Dark Mode")
+    submitDarkMode = SubmitField("Submit")
