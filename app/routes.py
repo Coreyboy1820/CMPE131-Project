@@ -115,7 +115,7 @@ def todo():
                 # create a new todoItem instance
                 lastItemId = dbSession.query(models.todoItem).order_by(models.todoItem.id.desc()).first().id
                 new_todo_item = models.todoItem(id=lastItemId+1, todoListId=new_todo_item_form.todoListId.data, name=new_todo_item_form.itemName.data, priority=new_todo_item_form.newItemPriority.data, 
-                                                startDate=startDate, dueDate=dueDate, dark_form = dark_mode_form)
+                                                startDate=startDate, dueDate=dueDate)
 
                 # retrieve the todoList instance to add the todoItem to
 
