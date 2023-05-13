@@ -165,10 +165,17 @@
           </li>
         </ul>
       </div>
-      <label class="switch">
-        <input type="checkbox">
-        <span class="slider"></span>
-      </label>
+      <form id="dark-mode-form" action="/darkMode" method="POST">
+        <label class="switch">
+          {% if dark_mode %}
+            {{dark_form.toggleMode(checked=False, onchange="clickSubmit('submitDarkMode')")}}
+          {% else %}
+          {{dark_form.toggleMode(onchange="clickSubmit('submitDarkMode')")}}
+          {% endif %}
+          <button id="submitDarkMode" type="submit" style="display:none"></button>
+          <span class="slider"></span>
+        </label>
+      </form>
       <label style="font-weight: 500; margin-left: 10px;">Dark/Light Mode</label>
     </nav>
     {% endif %}
@@ -200,6 +207,9 @@
     function hide(item) {
       let alert = item.parentNode;
       alert.style.display = "none";
+    }
+    function clickSubmit(submitButtonId){
+      document.getElementById(submitButtonId).click();
     }
     function checkDarkMode(darkMode){
       if(darkMode){
