@@ -171,7 +171,7 @@ def todo():
     dbSession.close()
     return render_template('todo.html', title="todo", todo_list_form=new_todo_list_form, todo_item_form=new_todo_item_form, 
                            update_todo_form=update_todo_item_form, update_list_form = update_todo_list_form, todo_lists = todo_lists,
-                           delete_todo_item = delete_todo_item_form, delete_todo_list = delete_todo_list_form, dark_mode=session["darkMode"])
+                           delete_todo_item = delete_todo_item_form, delete_todo_list = delete_todo_list_form, dark_mode=session["darkMode"], dark_form = dark_mode_form)
 
 
 
@@ -310,14 +310,14 @@ def settings():
 @myapp_obj.route("/darkMode", methods=["POST", "GET"])
 @login_page.loginFunctions.required_login
 def darkMode():
-    if "toggleMode" in request.form:
+    if "submitDarkMode" in request.form:
         dbSession = models.Session()
         current_user = dbSession.query(models.user).filter_by(id=session['userId']).first()
         current_user.darkMode = (current_user.darkMode + 1) % 2
         session["darkMode"] = (session["darkMode"] + 1) % 2
         dbSession.commit()
         dbSession.close()
-    return redirect(url_for('settings'))
+    return redirect(request.referrer)
 
 # Adds contact to the database
 @myapp_obj.route("/addContact", methods=["POST", "GET"])
