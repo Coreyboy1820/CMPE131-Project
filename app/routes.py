@@ -192,32 +192,30 @@ def emails():
         if 'to' and 'subject' and 'body' in request.form: # if the form was fully filled out
             # First split all users entered into a list
             receipients = request.form['to'].split(" ")
-            print(receipients)
-
             # then iterate over that list
+            dbSession.begin()
+            lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
+            messageId = lastMessageId+1
+            subject = request.form['subject']
+            body = request.form['body']
+            current_date = date.today()
+            message = models.message(id=messageId, senderId = currentUserId ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
+            lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
+            dbSession.add(message)
             for to in receipients:
-                # if the recepient is valid
                 userTo= dbSession.query(models.user).filter_by(email=to).first()
+                # if the recepient is valid
                 if(userTo is not None):
-                    subject = request.form['subject']
-                    body = request.form['body']
-                    current_date = date.today()
-                    lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
-                    messageId = lastMessageId+1
-                    message = models.message(id=messageId, senderId = currentUserId ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
-                    lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
-                    
                     # also have to add the recipient of the email to the recipient table
-                    receipientId = lastreceipientId+1
-                    receipient = models.recipient(id= receipientId ,userId= userTo.id, messageId=messageId)
+                    lastreceipientId = lastreceipientId+1
+                    receipient = models.recipient(id = lastreceipientId ,userId= userTo.id, messageId=messageId)
                     dbSession.add(receipient)
-                    dbSession.add(message)
-                    dbSession.commit()
-                    dbSession.close()
                     flash('Message was sent successfully', category="success")
                 
                 else:
                     flash('Recipient not found',category='error')
+            dbSession.commit()
+            dbSession.close()
             return redirect(url_for("emails"))
         elif 'updateMessage' in request.form:
             isUpdate='True'
