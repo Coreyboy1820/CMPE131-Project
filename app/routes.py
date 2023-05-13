@@ -194,18 +194,18 @@ def emails():
             receipients = request.form['to'].split(" ")
             # then iterate over that list
             dbSession.begin()
-            lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
-            messageId = lastMessageId+1
-            subject = request.form['subject']
-            body = request.form['body']
-            current_date = date.today()
-            message = models.message(id=messageId, senderId = currentUserId ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
-            lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
-            dbSession.add(message)
             for to in receipients:
                 userTo= dbSession.query(models.user).filter_by(email=to).first()
                 # if the recepient is valid
                 if(userTo is not None):
+                    lastMessageId = dbSession.query(models.message).order_by(models.message.id.desc()).first().id
+                    messageId = lastMessageId+1
+                    subject = request.form['subject']
+                    body = request.form['body']
+                    current_date = date.today()
+                    message = models.message(id=messageId, senderId = currentUserId ,message= body, sentDate= current_date, recievedDate = current_date, subject= subject)
+                    lastreceipientId = dbSession.query(models.recipient).order_by(models.recipient.id.desc()).first().id
+                    dbSession.add(message)
                     # also have to add the recipient of the email to the recipient table
                     lastreceipientId = lastreceipientId+1
                     receipient = models.recipient(id = lastreceipientId ,userId= userTo.id, messageId=messageId)
