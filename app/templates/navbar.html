@@ -77,52 +77,137 @@
             .highlight-email {
               background-color: lightblue !important;
             }
+            .navbar-dark  {
+              background-color: #222 !important;
+              color: white !important;
+              border-color: white !important;
+              border-bottom:solid;
+              border-width: 1px;
+            }
+            .switch {
+              position: relative;
+              display: inline-block;
+              width: 60px;
+              height: 30px;
+            }
+
+            .switch input {
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              -webkit-transition: .4s;
+              transition: .4s;
+              border-radius: 34px;
+            }
+
+            .slider:before {
+              position: absolute;
+              content: "";
+              height: 26px;
+              width: 26px;
+              left: 4px;
+              bottom: 2px;
+              background-color: darkgray;
+              -webkit-transition: .4s;
+              transition: .4s;
+              border-radius: 50%;
+            }
+
+            input:checked + .slider {
+              background-color: #fff;
+            }
+
+            input:focus + .slider {
+              box-shadow: 0 0 1px black ;
+            }
+
+            input:checked + .slider:before {
+              -webkit-transform: translateX(26px);
+              -ms-transform: translateX(26px);
+              transform: translateX(26px);
+            }
+
+            .hidden-button {
+              display: none;
+            }
+
           </style>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   
-    <!-- Navbar button definition -->
-    <div class="navbar sticky-top" style="width:100%;">
+    {% if title != "login" and title != "register" %}
+    <nav class="navbar navbar-expand-lg navbar-dark w-100" style="height: 50px;">
       <div style="justify-content: left;">
         <!-- Include the Bootstrap and Font Awesome CSS files -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
-
+    
       <!-- Add the email icon -->
-      <i class="fas fa-envelope"  width="40" height="40"></i>
-        <span class="ml-2 font-weight-bold">Gmail</span>
-    </div>
-    <div style="justify-content: right;">
-      {% if title != "login" and title != "register" %}
-          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/home'">Home</button>
-          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/emails'">Emails</button>
-          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/todo'">Todo</button>
-          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/settings'">Settings</button>
-          <button class="btn btn-primary navbarBtn" onclick="window.location.href='/logout'">Logout</button>
-      {% endif %}
-    </div>
-
-    <!-- This will display whatever alerts are sent from one page to another when navbar is included -->
-    {% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-      {% for category, message in messages %}
-      {% if category == "error" %}
-      <div id="alert_fail" class="alert alert-danger fade show sticky-top" role="alert" style="width:100%; position:absolute">
-        {{ message }}
-        <button type="button" onclick="hide(this)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+      <i class="fas fa-envelope"  width="40" height="40" style="color: #fff;"></i>
       </div>
-      {% elif category == "success" %}
-      <div id="alert_success" class="alert alert-success fade show sticky-top" role="alert" style="width:100%; position:absolute">
-        {{ message }}
-        <button type="button" onclick="hide(this)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+      <a class="navbar-brand" style="margin-left: 10px; color: #fff ;">Gmail Clone</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="/home" >Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/emails">Emails</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/todo">Todo</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/settings" >Settings</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
       </div>
-      {% endif %}
-      {% endfor %}
+      <form id="dark-mode-form" action="/darkMode" method="POST">
+        <label class="switch">
+          {% if dark_mode %}
+            {{dark_form.toggleMode(checked=True, onchange="clickSubmit('submitDarkMode')")}}
+          {% else %}
+            {{dark_form.toggleMode(checked=False, onchange="clickSubmit('submitDarkMode')")}}
+          {% endif %}
+          <span onchange="clickSubmit('submitDarkMode')" class="slider"></span>
+          {{ dark_form.submitDarkMode(style="display:none") }}
+        </label>
+      </form>
+      <label style="font-weight: 500; margin-left: 10px;">Dark/Light Mode</label>
+    </nav>
     {% endif %}
-  {% endwith %}
-</div>
+    <!-- This will display whatever alerts are sent from one page to another when navbar is included -->
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+  {% for category, message in messages %}
+  {% if category == "error" %}
+  <div id="alert_fail" class="alert alert-danger fade show sticky-top" role="alert" style="width:100%; position:absolute">
+    {{ message }}
+    <button type="button" onclick="hide(this)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+  </div>
+  {% elif category == "success" %}
+  <div id="alert_success" class="alert alert-success fade show sticky-top" role="alert" style="width:100%; position:absolute">
+    {{ message }} 
+    <button type="button" onclick="hide(this)" class="navbarBtn" data-bs-dismiss="alert">&times;</button>
+  </div> 
+  {% endif %}
+  {% endfor %}
+{% endif %}
+{% endwith %}
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -133,6 +218,9 @@
     function hide(item) {
       let alert = item.parentNode;
       alert.style.display = "none";
+    }
+    function clickSubmit(submitButtonId){
+      document.getElementById(submitButtonId).click()
     }
     function checkDarkMode(darkMode){
       if(darkMode){
@@ -166,6 +254,7 @@
         }
       }
     }
+
   </script>
   
     {% endblock %}
